@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_local_variable
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -72,16 +72,31 @@ class Authentication {
     });
   }
 
-  static void signin(BuildContext context, String email, String password) {
+  static void signin(BuildContext context, String email, String password,
+      VoidCallback onError) {
     final auth = FirebaseAuth.instance;
     auth.signInWithEmailAndPassword(email: email, password: password).then((_) {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomePage()));
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    }).catchError((error) {
+      onError(); // Invoke the provided onError callback if authentication fails
     });
   }
 
   static void resetPassword(BuildContext context, String email) {
     final auth = FirebaseAuth.instance;
     auth.sendPasswordResetEmail(email: email);
+  }
+
+  static Future<bool> checkUserExists(String email) async {
+    final auth = FirebaseAuth.instance;
+    try {
+      final methods = await auth.fetchSignInMethodsForEmail(email);
+      return methods.isNotEmpty;
+    } catch (e) {
+      print('Error checking user existence: $e');
+      return false;
+    }
   }
 }
