@@ -1,6 +1,6 @@
 # localbiz1
 
-A new Flutter project.
+Welcome to our LocalBiz Mobile App. It is a Flutter project.
 
 ## Getting Started
 
