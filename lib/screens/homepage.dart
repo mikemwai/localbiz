@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               onTap: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const Signin(),

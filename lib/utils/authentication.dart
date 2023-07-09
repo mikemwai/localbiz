@@ -25,7 +25,11 @@ class Authentication {
 
   static Future<void> signinWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    GoogleSignIn googleSignIn = GoogleSignIn();
+    GoogleSignIn googleSignIn = GoogleSignIn(
+      // Set your app's client ID
+      clientId:
+          '434848095913-hu23b995nmte1famb20p8scvf4t3pcgm.apps.googleusercontent.com',
+    );
 
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
