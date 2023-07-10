@@ -1,8 +1,15 @@
 # Localbiz
-Localbiz is a mobile and web application that is designed to help small business gain visibilty and users to access small businesses near their location.
+Localbiz is a mobile and web application that is designed to help small business gain visibilty and help users to access small businesses near their location.
 
 ## Project summary
-Our project intergrated the use of powerful APIs like Google maps API and Daraja API to provide small business owners a platform to improve their businesses and have an easy payment method while also allowing customers to locate businesses near them.This work highlights the potential of powerful API integration in creating a cohesive system that enhances local business discovery and directories.
+Our project intergrated the use of powerful APIs like Google maps API and Daraja API to provide small business owners a platform to improve their businesses and have an easy payment method while also allowing customers to locate businesses near them.This work highlights the potential of powerful API integration in creating a cohesive system that enhances local business discovery and directories.Our project consists of the following modules:
+1.admin module
+2.business owner module
+3.normal user module
+4.loaction API module
+5.payment module
+
+
 ## Project Installation
 
 ## Code to clone project
