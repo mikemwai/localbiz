@@ -11,7 +11,7 @@ Our project intergrated the use of powerful APIs like Google maps API and Daraja
 
 
 ## Project Installation
-
+This is how you intall the project:
 ## Code to clone project
 A few resources to get you started if this is your first Flutter project:
 
@@ -22,5 +22,5 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 ## Project Database.
-We used a firebase which is a cloud-hosted NoSQL database that stores and syncs data in real time and supports web,mobile-web and server clients.
+We used Firebase which is a cloud-hosted NoSQL database that stores and syncs data in real time and supports web,mobile-web and server clients.
 
