@@ -1,10 +1,10 @@
 # localbiz1
 
-Welcome to our LocalBiz Mobile App. The framework used is Flutter.
+A new Flutter project.
 
-## Getting Started
+## Project summary
 
-
+Localbiz is a mobile and web application that is designed to help small business gain visibilty and users to access small businesses near their location.
 
 A few resources to get you started if this is your first Flutter project:
 
