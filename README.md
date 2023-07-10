@@ -11,7 +11,7 @@ Our project intergrated the use of powerful APIs like Google maps API and Daraja
 
 
 ## Project Installation
-This is how you intall the project:
+This is how you install the project:
 ## Code to clone project
 A few resources to get you started if this is your first Flutter project:
 
