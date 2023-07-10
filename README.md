@@ -1,10 +1,9 @@
-# localbiz1
-
-A new Flutter project.
+# Localbiz
+Localbiz is a mobile and web application that is designed to help small business gain visibilty and users to access small businesses near their location.
 
 ## Project summary
+Our project intergrated the use of powerful APIs like Google maps API and Daraja API to provide small business owners a platform to improve their businesses and have an easy payment method while also allowing customers to locate businesses near them.
 
-Localbiz is a mobile and web application that is designed to help small business gain visibilty and users to access small businesses near their location.
 
 A few resources to get you started if this is your first Flutter project:
 
