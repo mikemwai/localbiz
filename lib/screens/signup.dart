@@ -18,6 +18,10 @@ class _SignupState extends State<Signup> {
   Color _passwordBorderColor = Colors.grey;
   Color _emailBorderColor = Colors.grey;
   bool _isPasswordVisible = false; // Track password visibility
+  late String _confirmPassword = '';
+  bool _isConfirmPasswordVisible = false;
+  bool _passwordsMatch = true; // Variable to track password match state
+  bool _showError = false;
 
   @override
   void dispose() {
@@ -79,8 +83,9 @@ class _SignupState extends State<Signup> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
-                  errorText:
-                      _showPasswordError ? 'Make password more secure' : null,
+                  errorText: _showPasswordError
+                      ? 'Make password more secure by using: \n *At least 8 characters, capital letters or symbols.'
+                      : null,
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     borderSide: BorderSide(color: _passwordBorderColor),
@@ -108,6 +113,41 @@ class _SignupState extends State<Signup> {
                     _showPasswordError = !_isPasswordValid(value);
                     _passwordBorderColor =
                         _showPasswordError ? Colors.red : Colors.green;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                obscureText: !_isConfirmPasswordVisible,
+                decoration: InputDecoration(
+                  hintText: "Confirm your password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  errorText: !_passwordsMatch && _showError
+                      ? 'Passwords do not match'
+                      : null,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      _isConfirmPasswordVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _confirmPassword = value.trim();
+                    _passwordsMatch =
+                        _passwordController.text.trim().isNotEmpty &&
+                            _confirmPassword == _passwordController.text.trim();
+                    _showError = _showError ||
+                        (!_passwordsMatch && _confirmPassword.isNotEmpty);
                   });
                 },
               ),
