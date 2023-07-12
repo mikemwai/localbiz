@@ -1,6 +1,6 @@
 # localbiz1
 
-Welcome to our LocalBiz Mobile App. The framework used is Flutter.
+Welcome to LocalBiz Application. The framework that was used is flutter.
 
 ## Getting Started
 
