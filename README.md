@@ -1,6 +1,7 @@
-# localbiz1
+# Localbiz
+##A flutter-based mobile application that aims to enhance the visibilty and growth of local businesses.
 
-Welcome to LocalBiz Application. The framework that was used is flutter.
+
 
 ## Getting Started
 
