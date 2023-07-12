@@ -1,9 +1,8 @@
 # LocalBiz
 ## A flutter-based mobile application that enables seamless local business discovery,interaction and secure transactions in one innovative platform.
 
-Localbiz is appliaction designed to revolutionize the way users discover and engage with local businesses.Leveraging location-based technology like Google maps API,users can effortlessly locate nearby establishments and seamlessly interact with them through a user-friendly interface.
-This platform further enhances the users experience by providing intergrated payment solutions enabling secure and convinient transactions within the system.By empowering local businesses to upload their comprehensive business profiles,Localbiz propels thier visibility and exposure to wider audiences,fostering economic growth and community development.
-This application redifines local business landscape,bridging the gap between consumers and establishments with its intuitive feautures and seamless functionalities.Experience the future of local business engagement with Localbiz,where convinience,connectivity and commerce converge in a single transformative platform.
+Localbiz is an application that transforms how users discover and engage with local businesses. It utilizes location-based technology, such as the Google Maps API, to effortlessly guide users to nearby establishments and provides a user-friendly interface for seamless interaction. The platform goes beyond mere discovery by integrating secure payment solutions, enabling convenient transactions within the system. By empowering local businesses to showcase comprehensive profiles, Localbiz enhances their visibility and exposure to a broader audience, fostering economic growth and community development. This innovative application revolutionizes the local business landscape, bringing consumers and establishments together through its intuitive features and seamless functionalities. Experience the future of local business engagement with Localbiz, where convenience, connectivity, and commerce converge in a transformative platform.
+
 ## Installation of the project
 To install the project,you need to follow the following steps:
 1. Fork the project to create a copy of the project in your own Github account.
