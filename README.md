@@ -1,6 +1,5 @@
-# localbiz1
-
-Welcome to our LocalBiz Mobile App. The framework used is Flutter.
+# LocalBiz
+## A flutter-based mobile application that enables seamless local business discovery,interaction and secure transactions in one innovative platform.
 
 
 ## Project Installation
