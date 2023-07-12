@@ -1,12 +1,11 @@
-# Localbiz
-##A flutter-based mobile application that aims to enhance the visibilty and growth of local businesses.
+# localbiz1
+
+Welcome to our LocalBiz Mobile App. The framework used is Flutter.
 
 
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
+## Project Installation
+This is how you install the project:
+## Code to clone project
 A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
@@ -15,3 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+## Project Database.
+We used Firebase which is a cloud-hosted NoSQL database that stores and syncs data in real time and supports web,mobile-web and server clients.
+
