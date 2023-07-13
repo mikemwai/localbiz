@@ -16,6 +16,8 @@ To fork on github CLI use the following command:
 'fluter pub get'
 7. Run the application by executing the command in the terminal to build and run the application on your connected Andriod device as shown below:                                           
 'flutter run'
+
+
 Requirement:you need to have internet connection.
 
 ### Project Database
