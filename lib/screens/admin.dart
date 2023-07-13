@@ -564,20 +564,106 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   }
 }
 
-class UpdateUserScreen extends StatelessWidget {
+class UpdateUserScreen extends StatefulWidget {
   final String userId;
 
   UpdateUserScreen(this.userId);
 
   @override
+  _UpdateUserScreenState createState() => _UpdateUserScreenState();
+}
+
+class _UpdateUserScreenState extends State<UpdateUserScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  void getUserDetails() async {
+    // Retrieve user details from Firestore using the provided userId
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
+        .get();
+
+    if (snapshot.exists) {
+      final user = snapshot.data() as Map<String, dynamic>;
+      final String email = user['email'];
+      final String role = user['role'];
+
+      setState(() {
+        _emailController.text = email;
+        _roleController.text = role;
+      });
+    }
+  }
+
+  void _updateUser() {
+    if (_formKey.currentState!.validate()) {
+      final String email = _emailController.text;
+      final String role = _roleController.text;
+
+      // TODO: Implement user update logic using Firestore
+      updateUserInFirestore(email, role);
+
+      // Navigate back to the user screen
+      Navigator.pop(context);
+    }
+  }
+
+  void updateUserInFirestore(String email, String role) {
+    FirebaseFirestore.instance.collection('users').doc(widget.userId).update({
+      'email': email,
+      'role': role,
+    });
+    print('User updated: email=$email, role=$role');
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: Build the update user screen UI
     return Scaffold(
       appBar: AppBar(
         title: Text('Update User'),
       ),
-      body: Center(
-        child: Text('Update User with ID: $userId'),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter an email';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _roleController,
+                decoration: InputDecoration(labelText: 'Role'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a role';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _updateUser,
+                child: Text('Update User'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
