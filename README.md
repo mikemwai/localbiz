@@ -1,6 +1,6 @@
 # localbiz
 ## A flutter-based mobile application that enables seamless local business discovery.
-### Project Summary
+### Project Description
 Localbiz is an  app that transforms how users discover and engage with local businesses. It utilizes location-based technology, guides users to nearby establishments, and enables secure payments within the platform. By empowering local businesses with comprehensive profiles, it enhances visibility and fosters economic growth. Experience the future of local business engagement with Localbiz, where convenience, connectivity, and commerce converge.
 
 ### Installation of the project
