@@ -20,7 +20,8 @@ The project utilizes Firebase as the database.To set up the database,follow thes
 2. Enable Firebase Authentication and configure the desired sign-in methods.
 3. Set up the Firestore database and Firestore rules according to your requirements.
 ### Dependenices 
-Before running the application,make sure you have the necessary dependencies installed.Run the following command to install the dependencies:
+Before running the application,make sure you have the necessary dependencies installed.
+Run the following command to install the dependencies:
 '''bash
 sh install_dependecies.sh
 ## Contributing 
