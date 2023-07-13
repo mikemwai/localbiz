@@ -30,7 +30,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.example.localbiz1"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -49,8 +49,8 @@ android {
     defaultConfig {
         applicationId "com.example.localbiz1"
         //minSdkVersion flutter.minSdkVersion
-        minSdkVersion 19   
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21   
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true

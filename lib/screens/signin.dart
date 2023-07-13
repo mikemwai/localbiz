@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, sized_box_for_whitespace, sort_child_properties_last, prefer_final_fields, unused_field
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, sized_box_for_whitespace, sort_child_properties_last, prefer_final_fields, unused_field, unnecessary_null_comparison, unused_element
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +8,10 @@ import 'package:flutter/material.dart';
 import '../utils/authentication.dart';
 import 'reset_password.dart';
 import 'signup.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'homepage.dart';
+import 'businessowner.dart';
+import 'admin.dart';
 
 class Signin extends StatefulWidget {
   const Signin({Key? key}) : super(key: key);
@@ -19,13 +24,13 @@ class _SigninState extends State<Signin> {
   String _email = '';
   late String _password = '';
   bool _showError = false;
-  bool _isInvalidCredentials = false; // Track invalid credentials
-  bool _isSigningIn = false; // Variable to track if the user is signing in
+  bool _isInvalidCredentials = false;
+  bool _isSigningIn = false;
   bool _isPasswordVisible = false;
   Timer? _timer;
   bool _isFingerprintSupported = false;
   final LocalAuthentication _localAuth = LocalAuthentication();
-  // Add these flags for error messages
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _showEmailError = false;
   bool _showPasswordError = false;
 
@@ -60,7 +65,6 @@ class _SigninState extends State<Signin> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        // Wrap the Scaffold with SingleChildScrollView
         child: Padding(
           padding: const EdgeInsets.only(top: 40, left: 10, right: 10),
           child: Column(
@@ -85,8 +89,7 @@ class _SigninState extends State<Signin> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: AnimatedOpacity(
                         opacity: _isInvalidCredentials ? 1.0 : 0.0,
-                        duration: const Duration(
-                            seconds: 5), // Change the duration to 3 seconds
+                        duration: const Duration(seconds: 5),
                         child: Text(
                           'Invalid credentials. Please try again.',
                           style: TextStyle(
@@ -112,10 +115,8 @@ class _SigninState extends State<Signin> {
                     onChanged: (value) {
                       setState(() {
                         _email = value.trim();
-                        _showEmailError =
-                            false; // Clear the error message when the user starts typing
-                        _timer
-                            ?.cancel(); // Cancel the timer when the email is being changed
+                        _showEmailError = false;
+                        _timer?.cancel();
                       });
                     },
                   ),
@@ -145,10 +146,8 @@ class _SigninState extends State<Signin> {
                     onChanged: (value) {
                       setState(() {
                         _password = value.trim();
-                        _showPasswordError =
-                            false; // Clear the error message when the user starts typing
-                        _timer
-                            ?.cancel(); // Cancel the timer when the password is being changed
+                        _showPasswordError = false;
+                        _timer?.cancel();
                       });
                     },
                   ),
@@ -183,7 +182,7 @@ class _SigninState extends State<Signin> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15))),
                       onPressed: _isSigningIn
-                          ? null // Disable button if already signing in
+                          ? null
                           : () {
                               setState(() {
                                 _isSigningIn = true;
@@ -192,10 +191,8 @@ class _SigninState extends State<Signin> {
                               if (_email.isEmpty || _password.isEmpty) {
                                 setState(() {
                                   _isSigningIn = false;
-                                  _showEmailError = _email
-                                      .isEmpty; // Show email error if empty
-                                  _showPasswordError = _password
-                                      .isEmpty; // Show password error if empty
+                                  _showEmailError = _email.isEmpty;
+                                  _showPasswordError = _password.isEmpty;
                                 });
                                 return;
                               }
@@ -204,8 +201,7 @@ class _SigninState extends State<Signin> {
                               _timer = Timer(const Duration(seconds: 5), () {
                                 setState(() {
                                   _isSigningIn = false;
-                                  _isInvalidCredentials =
-                                      false; // Reset invalid credentials
+                                  _isInvalidCredentials = false;
                                 });
                               });
 
@@ -332,3 +328,7 @@ class _SigninState extends State<Signin> {
     }
   }
 }
+
+/*TO BYPASS THE AUTHENTICATION ISSUE FOR NOW:
+  CREATE A USER ON FIREBASE AUTHENTICATION
+  THEN MANUALLY INSERT THE USER ID AS THE DOCUMENT ID UNTIL FURTHER NOTICE*/

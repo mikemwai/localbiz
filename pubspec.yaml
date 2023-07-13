@@ -36,6 +36,8 @@ dependencies:
   google_sign_in: ^6.1.4
   local_auth: ^1.1.7
   firebase_analytics: ^10.4.3
+  cloud_firestore: ^4.8.2
+  image_picker: ^1.0.1
   #flutter_web: ^0.0.4
   #flutter_web_ui: ^0.0.2
   #web:

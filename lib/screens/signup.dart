@@ -1,5 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, unused_local_variable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/authentication.dart';
 
@@ -22,6 +24,7 @@ class _SignupState extends State<Signup> {
   bool _isConfirmPasswordVisible = false;
   bool _passwordsMatch = true; // Variable to track password match state
   bool _showError = false;
+  final _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
@@ -229,6 +232,7 @@ class _SignupState extends State<Signup> {
   void _registerUser() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    final userId = _auth.currentUser!.uid;
 
     final userExists = await Authentication.checkUserExists(email);
 
@@ -251,7 +255,21 @@ class _SignupState extends State<Signup> {
         },
       );
     } else {
-      Authentication.signup(context, email, password);
+      await postDetailsToFirestore(email, userId);
+      Authentication.signup(context, email, password, userId);
     }
   }
+
+  Future<void> postDetailsToFirestore(String email, String userId) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    ref.doc(userId).set({
+      'email': email,
+      'role': 'normal_user'
+    }); //HERE IS WHERE THE PROBLEM IS!!!
+  }
 }
+
+/*TO BYPASS THE AUTHENTICATION ISSUE FOR NOW:
+  CREATE A USER ON FIREBASE AUTHENTICATION
+  THEN MANUALLY INSERT THE USER ID AS THE DOCUMENT ID UNTIL FURTHER NOTICE*/
