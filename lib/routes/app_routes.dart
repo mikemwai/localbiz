@@ -6,6 +6,7 @@ import 'package:localbiz1/screens/homepage.dart';
 import 'package:localbiz1/screens/signin.dart';
 import 'package:localbiz1/screens/splash_screen.dart';
 import 'package:localbiz1/screens/admin.dart';
+//import 'package:localbiz1/screens/admin/users_screen.dart';
 
 class AppRoutes {
   static const String splashScreen = '/splashscreen';
@@ -13,6 +14,7 @@ class AppRoutes {
   static const String admin = '/admin';
   static const String businessowner = '/businessowner';
   static const String homepage = '/homepage';
+  //static const String usersScreen = '/usersScreen';
 
   static Map<String, WidgetBuilder> routes = {
     splashScreen: (context) => SplashScreen(),
@@ -24,5 +26,7 @@ class AppRoutes {
     businessowner: (context) => BusinessOwner(),
 
     homepage: (context) => HomePage(),
+
+    //usersScreen: (context) => UsersScreen(),
   };
 }

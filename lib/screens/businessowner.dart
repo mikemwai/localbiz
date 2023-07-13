@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../utils/authentication.dart';
@@ -14,11 +15,22 @@ class BusinessOwner extends StatefulWidget {
 
 class _BusinessOwnerState extends State<BusinessOwner> {
   bool isDrawerOpen = false;
+  String userEmail = ''; // Declare userEmail variable
 
   void toggleDrawer() {
     setState(() {
       isDrawerOpen = !isDrawerOpen;
     });
+  }
+
+  Future<void> getUserEmail() async {
+    // Retrieve the user's email from Firebase
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userEmail = user.email ?? ''; // Update the userEmail variable
+      });
+    }
   }
 
   @override
@@ -40,7 +52,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
+            UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
@@ -52,7 +64,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                 ),
               ),
               accountEmail: Text(
-                'owner@example.com',
+                userEmail, // Display the user's email retrieved from Firebase
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,

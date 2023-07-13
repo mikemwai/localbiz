@@ -1,13 +1,14 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
 //import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localbiz1/screens/splash_screen.dart';
 import 'package:localbiz1/utils/authentication.dart';
 
 //Mobile App Code
-void main() {
+/*void main() {
   WidgetsFlutterBinding.ensureInitialized();
   //Authentication.initializeFirebase();
   SystemChrome.setPreferredOrientations([
@@ -44,10 +45,10 @@ class MyApp extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(Colors.blue));
         });
   }
-}
+}*/
 
 //Web App Code
-/*void main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -103,4 +104,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}*/
+}
