@@ -1,5 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_final_fields, sort_child_properties_last, depend_on_referenced_packages, unused_field
 
+import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Completer<GoogleMapController> _controller = Completer();
   bool isDrawerOpen = false;
   String userEmail = ''; // Variable to store the user's email
 
@@ -42,12 +45,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Page'),
-      ),
       body: Column(
         children: [
-          Container(
+          // App Bar
+          AppBar(
+            title: Text('User: Local Business Search'),
+          ),
+          // Search Bar
+          /*Container(
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               border: Border(
@@ -66,7 +71,10 @@ class _HomePageState extends State<HomePage> {
                 // TODO: Implement search logic based on user input
               },
             ),
-          ),
+            width: MediaQuery.of(context).size.width * 0.75,
+            alignment: Alignment.center,
+          ),*/
+          // Local Businesses
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(10.0),

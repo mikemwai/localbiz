@@ -38,6 +38,7 @@ dependencies:
   firebase_analytics: ^10.4.3
   cloud_firestore: ^4.8.2
   image_picker: ^1.0.1
+  geolocator: ^9.0.2
   #flutter_web: ^0.0.4
   #flutter_web_ui: ^0.0.2
   #web:
@@ -48,6 +49,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
+  google_maps_flutter: ^2.3.1
 
 dev_dependencies:
   flutter_test:

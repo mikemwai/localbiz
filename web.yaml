@@ -1,0 +1,22 @@
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+  flutter:
+    sdk: flutter
+
+dependencies:
+  flutter:
+    sdk: flutter
+  geolocator: ^7.7.0
+
+  # The following line indicates that this project uses the
+  # localbiz1/models package.
+
+  localbiz1_models:
+    path: packages/localbiz1_models
+
+  # The following line indicates that this project uses an API key
+  # for web.
+
+  google_maps_webservice: ^0.7.3
+
+  api_key: AIzaSyBuD_taQ5FNMp3NjLi3S6V2pHRwL0LmD28

@@ -44,7 +44,7 @@ class _SignupState extends State<Signup> {
           child: Column(
             children: [
               const SizedBox(
-                height: 130,
+                height: 60,
               ),
               const Center(
                 child: Text(
@@ -53,108 +53,124 @@ class _SignupState extends State<Signup> {
                 ),
               ),
               const SizedBox(height: 20),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: "Enter your email address",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  ),
-                  errorText: _showEmailError ? 'Invalid email format' : null,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                    borderSide: BorderSide(color: _emailBorderColor),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _showEmailError = !_isEmailValid(value);
-                    _emailBorderColor =
-                        _showEmailError ? Colors.red : Colors.green;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _passwordController,
-                obscureText:
-                    !_isPasswordVisible, // Use obscureText based on visibility state
-                decoration: InputDecoration(
-                  hintText: "Enter your password",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  ),
-                  errorText: _showPasswordError
-                      ? 'Make password more secure by using: \n *At least 8 characters, capital letters or symbols.'
-                      : null,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                    borderSide: BorderSide(color: _passwordBorderColor),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      hintText: "Enter your email address",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      errorText:
+                          _showEmailError ? 'Invalid email format' : null,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        borderSide: BorderSide(color: _emailBorderColor),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                    onChanged: (value) {
                       setState(() {
-                        _isPasswordVisible =
-                            !_isPasswordVisible; // Toggle password visibility
+                        _showEmailError = !_isEmailValid(value);
+                        _emailBorderColor =
+                            _showEmailError ? Colors.red : Colors.green;
                       });
                     },
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _showPasswordError = !_isPasswordValid(value);
-                    _passwordBorderColor =
-                        _showPasswordError ? Colors.red : Colors.green;
-                  });
-                },
               ),
               const SizedBox(height: 20),
-              TextField(
-                obscureText: !_isConfirmPasswordVisible,
-                decoration: InputDecoration(
-                  hintText: "Confirm your password",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  ),
-                  errorText: !_passwordsMatch && _showError
-                      ? 'Passwords do not match'
-                      : null,
-                  suffixIcon: IconButton(
-                    onPressed: () {
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: !_isPasswordVisible,
+                    decoration: InputDecoration(
+                      hintText: "Enter your password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      errorText: _showPasswordError
+                          ? 'Make password more secure by using: \n *At least 8 characters, capital letters or symbols.'
+                          : null,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        borderSide: BorderSide(color: _passwordBorderColor),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
                       setState(() {
-                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                        _showPasswordError = !_isPasswordValid(value);
+                        _passwordBorderColor =
+                            _showPasswordError ? Colors.red : Colors.green;
                       });
                     },
-                    icon: Icon(
-                      _isConfirmPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _confirmPassword = value.trim();
-                    _passwordsMatch =
-                        _passwordController.text.trim().isNotEmpty &&
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  child: TextField(
+                    obscureText: !_isConfirmPasswordVisible,
+                    decoration: InputDecoration(
+                      hintText: "Confirm your password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      ),
+                      errorText: !_passwordsMatch && _showError
+                          ? 'Passwords do not match'
+                          : null,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isConfirmPasswordVisible =
+                                !_isConfirmPasswordVisible;
+                          });
+                        },
+                        icon: Icon(
+                          _isConfirmPasswordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _confirmPassword = value.trim();
+                        _passwordsMatch = _passwordController.text
+                                .trim()
+                                .isNotEmpty &&
                             _confirmPassword == _passwordController.text.trim();
-                    _showError = _showError ||
-                        (!_passwordsMatch && _confirmPassword.isNotEmpty);
-                  });
-                },
+                        _showError = _showError ||
+                            (!_passwordsMatch && _confirmPassword.isNotEmpty);
+                      });
+                    },
+                  ),
+                ),
               ),
               const SizedBox(height: 25),
               SizedBox(
