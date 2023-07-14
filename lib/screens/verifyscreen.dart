@@ -39,8 +39,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
       appBar: AppBar(
           centerTitle: true,
           elevation: 10,
-          backgroundColor: Colors.black45,
-          title: const Text('LocalBiz')),
+          //backgroundColor: Colors.black45,
+          title: const Text('Verify Email')),
       body: Center(
         child: Text('An email has been sent to ${user!.email} please verify'),
       ),

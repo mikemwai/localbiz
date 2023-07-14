@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, unused_local_variable
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, unused_local_variable, no_leading_underscores_for_local_identifiers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +15,7 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
   bool _showPasswordError = false;
   bool _showEmailError = false;
   Color _passwordBorderColor = Colors.grey;
@@ -30,6 +31,7 @@ class _SignupState extends State<Signup> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _roleController.dispose();
     super.dispose();
   }
 
@@ -232,7 +234,6 @@ class _SignupState extends State<Signup> {
   void _registerUser() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    final userId = _auth.currentUser!.uid;
 
     final userExists = await Authentication.checkUserExists(email);
 
@@ -255,21 +256,7 @@ class _SignupState extends State<Signup> {
         },
       );
     } else {
-      await postDetailsToFirestore(email, userId);
-      Authentication.signup(context, email, password, userId);
+      Authentication.signup(context, email, password);
     }
   }
-
-  Future<void> postDetailsToFirestore(String email, String userId) async {
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    CollectionReference ref = FirebaseFirestore.instance.collection('users');
-    ref.doc(userId).set({
-      'email': email,
-      'role': 'normal_user'
-    }); //HERE IS WHERE THE PROBLEM IS!!!
-  }
 }
-
-/*TO BYPASS THE AUTHENTICATION ISSUE FOR NOW:
-  CREATE A USER ON FIREBASE AUTHENTICATION
-  THEN MANUALLY INSERT THE USER ID AS THE DOCUMENT ID UNTIL FURTHER NOTICE*/

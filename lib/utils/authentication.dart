@@ -76,22 +76,31 @@ class Authentication {
     BuildContext context,
     String email,
     String password,
-    String userId,
+    //String userId,
   ) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      // Create a new user with email and password.
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-      await firestore.collection('users').doc(userId).set({
+      // Get the user id.
+      final uid = userCredential.user!.uid;
+
+      // Create a document reference in Firestore.
+      final documentReference =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      // Set the document data.
+      Map<String, dynamic> data = {
         'email': email,
         'role': 'normal_user',
-        // Add other user data if needed
-      });
+      };
+
+      // Write the document to Firestore.
+      await documentReference.set(data);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const VerifyScreen()),

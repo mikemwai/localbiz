@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_build_context_synchronously, prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -310,7 +310,11 @@ class _AdminState extends State<Admin> {
             ListTile(
               title: const Text('View Profile'),
               onTap: () {
-                // TODO: Implement the profile screen navigation
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),*/
               },
             ),
             const Divider(),
@@ -330,28 +334,42 @@ class _AdminState extends State<Admin> {
             ListTile(
               title: const Text('Businesses'),
               onTap: () {
-                // TODO: Implement the navigation to the businesses screen
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),*/
               },
             ),
             const Divider(),
             ListTile(
               title: const Text('Orders'),
               onTap: () {
-                // TODO: Implement the navigation to the orders screen
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),*/
               },
             ),
             const Divider(),
             ListTile(
               title: const Text('Payments'),
               onTap: () {
-                // TODO: Implement the navigation to the saved businesses screen
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),*/
               },
             ),
             const Divider(),
             ListTile(
               title: const Text('Ratings'),
               onTap: () {
-                // TODO: Implement the navigation to the ratings screen
+                /*Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const Signin(),
+                  ));*/
               },
             ),
             const Divider(),
@@ -404,25 +422,68 @@ class UsersScreen extends StatelessWidget {
           final users = snapshot.data!.docs;
 
           // Build the table widget
-          return DataTable(
-            columns: [
-              DataColumn(label: Text('Email')),
-              DataColumn(label: Text('Role')),
-              DataColumn(label: Text('Action')),
-            ],
-            rows: users.map((userDoc) {
-              final user = userDoc.data() as Map<String, dynamic>;
-              final email = user['email'];
-              final role = user['role'];
+          return Center(
+            child: FractionallySizedBox(
+              widthFactor:
+                  0.80, // Set the desired width factor (75% in this case)
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  margin: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    height: MediaQuery.of(context).size.height *
+                        0.75, // Set the desired height
+                    child: DataTable(
+                      columnSpacing: 40.0, // Adjust the spacing between columns
+                      headingRowColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.grey.shade300,
+                      ),
+                      columns: [
+                        DataColumn(
+                          label: Text('Email'),
+                        ),
+                        DataColumn(
+                          label: Text('Role'),
+                        ),
+                        DataColumn(
+                          label: Text('Action'),
+                        ),
+                      ],
+                      rows: users.map((userDoc) {
+                        final user = userDoc.data() as Map<String, dynamic>;
+                        final email = user['email'];
+                        final role = user['role'];
 
-              return DataRow(
-                cells: [
-                  DataCell(Text(email)),
-                  DataCell(Text(role)),
-                  DataCell(buildActionWidget(context, userDoc.id, role)),
-                ],
-              );
-            }).toList(),
+                        return DataRow(
+                          cells: [
+                            DataCell(
+                              Text(email),
+                              showEditIcon: false,
+                              placeholder: false,
+                            ),
+                            DataCell(
+                              Text(role),
+                              showEditIcon: false,
+                              placeholder: false,
+                            ),
+                            DataCell(
+                              buildActionWidget(context, userDoc.id, role),
+                              showEditIcon: false,
+                              placeholder: false,
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -437,30 +498,25 @@ class UsersScreen extends StatelessWidget {
   }
 
   Widget buildActionWidget(BuildContext context, String userId, String role) {
-    if (role == 'admin') {
-      return Text('N/A');
-    } else {
-      return Row(
-        children: [
-          IconButton(
-            icon: Icon(Icons.create),
-            onPressed: () {
-              navigateToUpdateUserScreen(context, userId);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              deleteUser(userId);
-            },
-          ),
-        ],
-      );
-    }
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.create),
+          onPressed: () {
+            navigateToUpdateUserScreen(context, userId);
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            deleteUser(context, userId); // Pass the BuildContext parameter
+          },
+        ),
+      ],
+    );
   }
 
   void navigateToCreateUserScreen(BuildContext context) {
-    // TODO: Implement navigation to the create user screen
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CreateUserScreen()),
@@ -475,9 +531,55 @@ class UsersScreen extends StatelessWidget {
     );
   }
 
-  void deleteUser(String userId) {
-    FirebaseFirestore.instance.collection('users').doc(userId).delete();
-    print('Deleted user with ID: $userId');
+  void deleteUser(BuildContext context, String userId) async {
+    try {
+      // Check if the user document exists.
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      // If the user document does not exist, do not delete it.
+      if (!userDoc.exists) {
+        print('User document with ID $userId does not exist.');
+        return;
+      }
+
+      // Delete the user.
+      try {
+        await FirebaseAuth.instance.currentUser!.delete();
+        print('The user has been deleted.');
+      } on FirebaseAuthException catch (e) {
+        // Handle the exception.
+        print(e.message);
+      }
+
+      // Delete user from Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+      print('Deleted user with ID: $userId');
+
+      // Navigate back to the user screen
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error deleting user: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to delete user. Please try again.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
 
@@ -498,25 +600,63 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     super.dispose();
   }
 
-  void _createUser() {
+  String? role;
+
+  void _createUser() async {
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text;
-      final String role = _roleController.text;
 
-      // TODO: Implement user creation logic using Firestore
-      createUserInFirestore(email, role);
+      // Initialize the role variable.
+      role = _roleController.text;
 
-      // Navigate back to the user screen
-      Navigator.pop(context);
+      try {
+        // Create a new user with email and password.
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: 'password');
+
+        // Get the user id.
+        final uid = userCredential.user!.uid;
+
+        // Create a document reference in Firestore.
+        final documentReference =
+            FirebaseFirestore.instance.collection('users').doc(uid);
+
+        // Set the document data.
+        Map<String, dynamic> data = {
+          'email': email,
+          'role': role,
+        };
+
+        // Write the document to Firestore.
+        await documentReference.set(data);
+
+        // Navigate back to the user screen
+        Navigator.pop(context);
+
+        // Send a password reset email after the user is created.
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      } catch (e) {
+        // Handle errors here
+        print('Error creating user: $e');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Failed to create user. Please try again.'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
-  }
-
-  void createUserInFirestore(String email, String role) {
-    FirebaseFirestore.instance.collection('users').add({
-      'email': email,
-      'role': role,
-    });
-    print('User created: email=$email, role=$role');
   }
 
   @override
