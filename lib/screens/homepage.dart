@@ -11,6 +11,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,6 +33,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final Completer<GoogleMapController> _controller = Completer();
+  late GoogleMapController googleMapController;
 
   bool isDrawerOpen = false;
   String userEmail = ''; // Variable to store the user's email
@@ -60,6 +62,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   var radiusValue = 3000.0;
   var tappedPoint;
   List allFavoritePlaces = [];
+  bool filterActive = false; // Add this variable to track the filter state
 
   String tokenKey = '';
 
@@ -83,6 +86,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     });
   }
 
+  // Add this function to toggle the filter state when the button is pressed
+  void _toggleFilter() {
+    setState(() {
+      filterActive = !filterActive;
+    });
+  }
+
   Future<void> getUserEmail() async {
     // Retrieve the user's email from Firebase
     User? user = FirebaseAuth.instance.currentUser;
@@ -100,7 +110,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
 //Initial map position on load
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(-1.309211, 36.812743),
+    //target: LatLng(-1.309211, 36.812743),
+    target: LatLng(0, 0),
     zoom: 14.4746,
   );
 
@@ -428,6 +439,35 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return position;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -457,8 +497,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                     polylines: _polylines,
                     circles: _circles,
                     initialCameraPosition: _kGooglePlex,
-                    onMapCreated: (GoogleMapController controller) {
+                    onMapCreated: (GoogleMapController controller) async {
                       _controller.complete(controller);
+                      googleMapController = controller;
+                      Position position = await _determinePosition();
+
+                      googleMapController.animateCamera(
+                          CameraUpdate.newCameraPosition(CameraPosition(
+                              target:
+                                  LatLng(position.latitude, position.longitude),
+                              zoom: 14)));
+
+                      _markers.clear();
+
+                      _markers.add(Marker(
+                          markerId: const MarkerId('currentLocation'),
+                          position:
+                              LatLng(position.latitude, position.longitude)));
+
+                      setState(() {});
                     },
                     onTap: (point) {
                       tappedPoint = point;
@@ -983,7 +1040,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             ),
                           ),
                         ))
-                    : Container()
+                    : Container(),
               ],
             ),
           ],
@@ -1020,6 +1077,29 @@ class _HomePageState extends ConsumerState<HomePage> {
                   });
                 },
                 icon: Icon(Icons.navigation)),
+            IconButton(
+              onPressed: () async {
+                Position position = await _determinePosition();
+
+                googleMapController.animateCamera(
+                    CameraUpdate.newCameraPosition(CameraPosition(
+                        target: LatLng(position.latitude, position.longitude),
+                        zoom: 14)));
+
+                _markers.clear();
+
+                _markers.add(Marker(
+                    markerId: const MarkerId('currentLocation'),
+                    position: LatLng(position.latitude, position.longitude)));
+
+                setState(() {});
+              },
+              icon: Icon(Icons.location_history),
+            ),
+            IconButton(
+              onPressed: _toggleFilter, // Toggle the filter state
+              icon: Icon(Icons.filter_list),
+            ),
             // Add the additional floating action button for the drawer.
             IconButton(
               onPressed: () {
@@ -1100,9 +1180,17 @@ class _HomePageState extends ConsumerState<HomePage> {
               onTap: () {
                 SchedulerBinding.instance!.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const Signin(),
-                  ));
+                  try {
+                    // After successful sign-out, navigate to the sign-in page
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => const Signin()),
+                      (route) =>
+                          false, // Remove all other routes from the stack
+                    );
+                  } catch (e) {
+                    print('Error signing out: $e');
+                    // Handle any sign-out errors here
+                  }
                 });
               },
             ),
