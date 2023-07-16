@@ -24,7 +24,10 @@ The project utilizes Firebase as the database.To set up the database,follow thes
 Before running the application,make sure you have the necessary dependencies installed.
 Run the following command to install the dependencies:
 
-`sh install_dependecies.sh`
+  ```sh
+  sh install_dependecies.sh
+  ```
+
 
 ## Contact Us
 If you have an issues with the project,please feel free to open up an issue.
