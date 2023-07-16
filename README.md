@@ -4,15 +4,29 @@ Localbiz is an  app that transforms how users discover and engage with local bus
 
 To install the project do the following:
 1. Fork the project to create a copy of the project in your own Github account.
-To fork on github CLI use the following command:                  
-   `gh repo fork OWNER/REPO`
+To fork on github CLI use the following command: 
+
+```sh
+  gh repo fork OWNER/REPO
+  ```
+
 2. Download the project as a zip file from your forked repository and extract its contents.
 3. Enable developer settings on your Andriod phone to allow installation of applications from unkwon sources. This will enable USB debugging.
 4. Open the project in your preffered IDE such as VisualStudio Code.
-5. Install the dependencies by running the command  to get the necessary packages and dependencies:                             
-`fluter pub get`
-6. Run the application by executing the command in the terminal to build and run the application on your connected Andriod device as shown below:                                           
-`flutter run`
+5. Install the dependencies by running the command  to get the necessary packages and dependencies: 
+
+```sh
+  fluter pub get
+  ```
+
+
+6. Run the application by executing the command in the terminal to build and run the application on your connected Andriod device as shown below:  
+
+```sh
+ flutter run
+  ```
+
+
 
 
 The project utilizes Firebase as the database.To set up the database,follow these steps:
