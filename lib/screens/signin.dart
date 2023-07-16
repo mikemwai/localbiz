@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, sized_box_for_whitespace, sort_child_properties_last, prefer_final_fields, unused_field, unnecessary_null_comparison, unused_element
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,9 +8,6 @@ import '../utils/authentication.dart';
 import 'reset_password.dart';
 import 'signup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'homepage.dart';
-import 'businessowner.dart';
-import 'admin.dart';
 
 class Signin extends StatefulWidget {
   const Signin({Key? key}) : super(key: key);
@@ -103,7 +99,7 @@ class _SigninState extends State<Signin> {
                 ),
                 Center(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.80,
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Enter your email address',
@@ -126,7 +122,7 @@ class _SigninState extends State<Signin> {
                 const SizedBox(height: 20),
                 Center(
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.80,
                     child: TextField(
                       obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
@@ -183,7 +179,7 @@ class _SigninState extends State<Signin> {
                 ),
                 const SizedBox(height: 25),
                 SizedBox(
-                  width: 360,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -236,7 +232,7 @@ class _SigninState extends State<Signin> {
                 ),
                 const SizedBox(height: 30),
                 SizedBox(
-                  width: 360,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

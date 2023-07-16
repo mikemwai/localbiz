@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors, unused_local_variable, no_leading_underscores_for_local_identifiers
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../utils/authentication.dart';
@@ -55,7 +54,7 @@ class _SignupState extends State<Signup> {
               const SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -87,7 +86,7 @@ class _SignupState extends State<Signup> {
               const SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: TextField(
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
@@ -133,7 +132,7 @@ class _SignupState extends State<Signup> {
               const SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: TextField(
                     obscureText: !_isConfirmPasswordVisible,
                     decoration: InputDecoration(
@@ -174,7 +173,7 @@ class _SignupState extends State<Signup> {
               ),
               const SizedBox(height: 25),
               SizedBox(
-                width: 360,
+                width: MediaQuery.of(context).size.width * 0.80,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -200,7 +199,7 @@ class _SignupState extends State<Signup> {
                 height: 20,
               ),
               SizedBox(
-                width: 360,
+                width: MediaQuery.of(context).size.width * 0.80,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(

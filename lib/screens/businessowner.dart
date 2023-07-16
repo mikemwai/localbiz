@@ -114,7 +114,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                 ),
               ),
               onTap: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const Signin(),

@@ -96,7 +96,7 @@ class _AdminState extends State<Admin> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 4,
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -145,7 +145,7 @@ class _AdminState extends State<Admin> {
                   SizedBox(width: 8),
                   Expanded(
                     flex: 1,
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 4,
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -195,7 +195,7 @@ class _AdminState extends State<Admin> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 4,
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -238,7 +238,7 @@ class _AdminState extends State<Admin> {
                   SizedBox(width: 8),
                   Expanded(
                     flex: 1,
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height / 4,
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -381,7 +381,7 @@ class _AdminState extends State<Admin> {
                 ),
               ),
               onTap: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const Signin(),
@@ -401,6 +401,8 @@ class _AdminState extends State<Admin> {
 }
 
 class UsersScreen extends StatelessWidget {
+  const UsersScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -427,58 +429,62 @@ class UsersScreen extends StatelessWidget {
               widthFactor:
                   0.80, // Set the desired width factor (75% in this case)
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 child: Container(
                   margin: EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.75,
                     height: MediaQuery.of(context).size.height *
                         0.75, // Set the desired height
-                    child: DataTable(
-                      columnSpacing: 40.0, // Adjust the spacing between columns
-                      headingRowColor: MaterialStateColor.resolveWith(
-                        (states) => Colors.grey.shade300,
-                      ),
-                      columns: [
-                        DataColumn(
-                          label: Text('Email'),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columnSpacing:
+                            30.0, // Adjust the spacing between columns
+                        headingRowColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.grey.shade300,
                         ),
-                        DataColumn(
-                          label: Text('Role'),
-                        ),
-                        DataColumn(
-                          label: Text('Action'),
-                        ),
-                      ],
-                      rows: users.map((userDoc) {
-                        final user = userDoc.data() as Map<String, dynamic>;
-                        final email = user['email'];
-                        final role = user['role'];
+                        columns: [
+                          DataColumn(
+                            label: Text('Email'),
+                          ),
+                          DataColumn(
+                            label: Text('Role'),
+                          ),
+                          DataColumn(
+                            label: Text('Action'),
+                          ),
+                        ],
+                        rows: users.map((userDoc) {
+                          final user = userDoc.data() as Map<String, dynamic>;
+                          final email = user['email'];
+                          final role = user['role'];
 
-                        return DataRow(
-                          cells: [
-                            DataCell(
-                              Text(email),
-                              showEditIcon: false,
-                              placeholder: false,
-                            ),
-                            DataCell(
-                              Text(role),
-                              showEditIcon: false,
-                              placeholder: false,
-                            ),
-                            DataCell(
-                              buildActionWidget(context, userDoc.id, role),
-                              showEditIcon: false,
-                              placeholder: false,
-                            ),
-                          ],
-                        );
-                      }).toList(),
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                Text(email),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                              DataCell(
+                                Text(role),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                              DataCell(
+                                buildActionWidget(context, userDoc.id, role),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
@@ -584,6 +590,8 @@ class UsersScreen extends StatelessWidget {
 }
 
 class CreateUserScreen extends StatefulWidget {
+  const CreateUserScreen({super.key});
+
   @override
   _CreateUserScreenState createState() => _CreateUserScreenState();
 }
@@ -707,7 +715,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
 class UpdateUserScreen extends StatefulWidget {
   final String userId;
 
-  UpdateUserScreen(this.userId);
+  const UpdateUserScreen(this.userId, {super.key});
 
   @override
   _UpdateUserScreenState createState() => _UpdateUserScreenState();
@@ -772,36 +780,55 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an email';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _roleController,
-                decoration: InputDecoration(labelText: 'Role'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a role';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _updateUser,
-                child: Text('Update User'),
-              ),
-            ],
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(labelText: 'Email'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter an email';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  child: TextFormField(
+                    controller: _roleController,
+                    decoration: InputDecoration(labelText: 'Role'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a role';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  height: 50, // Replace with your desired height
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    onPressed: _updateUser,
+                    child: Text('Update User'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

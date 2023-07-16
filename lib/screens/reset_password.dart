@@ -28,20 +28,24 @@ class _ResetPasswordState extends State<ResetPassword> {
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: 'Email'),
-              onChanged: (value) {
-                setState(() {
-                  _email = value.trim();
-                });
-              },
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.80,
+            height: 80,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextField(
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(hintText: 'Email'),
+                onChanged: (value) {
+                  setState(() {
+                    _email = value.trim();
+                  });
+                },
+              ),
             ),
           ),
           SizedBox(
-            width: 360,
+            width: MediaQuery.of(context).size.width * 0.80,
             height: 50,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -70,7 +74,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             height: 20,
           ),
           SizedBox(
-            width: 360,
+            width: MediaQuery.of(context).size.width * 0.80,
             height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(

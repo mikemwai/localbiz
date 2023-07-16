@@ -95,6 +95,9 @@ class Authentication {
 
       // Set the document data.
       Map<String, dynamic> data = {
+        'fname': '',
+        'lname': '',
+        'phoneno': '',
         'email': email,
         'role': 'normal_user',
       };
