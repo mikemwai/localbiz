@@ -30,7 +30,7 @@ To fork on github CLI use the following command:
 
 
 The project utilizes Firebase as the database.To set up the database,follow these steps:
-1. Create a Firebase project at [https://console.firebase.google.com]
+1. Create a Firebase project at 
    (https://console.firebase.google.com).
 2. Enable Firebase Authentication and configure the desired sign-in methods.
 3. Set up the Firestore database and Firestore rules according to your requirements.
