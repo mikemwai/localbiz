@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:localbiz1/screens/homepage.dart';
 import '../utils/authentication.dart';
+import 'admin/businesses.dart';
 import 'signin.dart';
+import 'admin/profile_screen1.dart'; // Replace 'profile_screen.dart' with the actual file name
 
 class Admin extends StatefulWidget {
   const Admin({Key? key}) : super(key: key);
@@ -73,6 +76,16 @@ class _AdminState extends State<Admin> {
     });
   }
 
+  final ThemeData customTheme = ThemeData(
+    primaryColor: Colors.blue, // Replace with your desired primary color
+    hintColor: Colors.teal, // Replace with your desired accent color
+    fontFamily: 'Roboto', // Replace with your desired font
+    textTheme: TextTheme(
+      headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      bodyText1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -83,206 +96,203 @@ class _AdminState extends State<Admin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 4,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 2.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // Navigate to the "Users" screen
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UsersScreen(),
+      appBar: AppBar(title: Text('Admin Dashboard')),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Navigate to the "Users" screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UsersScreen(),
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.group,
+                                    size: 40,
+                                    color: Theme.of(context)
+                                        .primaryColor), // Add the Group Icon
+                                SizedBox(height: 10),
+                                Text(
+                                  'Total Users',
+                                  style: Theme.of(context).textTheme.headline6,
                                 ),
-                              );
-                            },
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Users',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '$rowCount',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                SizedBox(height: 10),
+                                Text(
+                                  '$rowCount',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 4,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 2.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // TODO: Implement the action for the second card
-                            },
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Businesses',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '$rowCount1',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BusinessesScreen(), // Replace with your BusinessesScreen widget
                               ),
+                            );
+                          },
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.business,
+                                    size: 40,
+                                    color: Theme.of(context)
+                                        .primaryColor), // Add the Business Icon
+                                SizedBox(height: 10),
+                                Text(
+                                  'Total Businesses',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  '$rowCount1',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(height: 4),
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 4,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 2.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // TODO: Implement the action for the third card
-                            },
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Orders',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '$rowCount2',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+          ),
+          SizedBox(height: 4),
+          Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            // TODO: Implement the action for the third card
+                          },
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.shopping_cart,
+                                    size: 40,
+                                    color: Theme.of(context)
+                                        .primaryColor), // Add the Shopping Cart Icon
+                                SizedBox(height: 10),
+                                Text(
+                                  'Total Orders',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  '$rowCount2',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 4,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        elevation: 2.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              // TODO: Implement the action for the fourth card
-                            },
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Payments',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '$rowCount3',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            // TODO: Implement the action for the fourth card
+                          },
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.payment,
+                                    size: 40,
+                                    color: Theme.of(context)
+                                        .primaryColor), // Add the Payment Icon
+                                SizedBox(height: 10),
+                                Text(
+                                  'Total Payments',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  '$rowCount3',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -291,6 +301,15 @@ class _AdminState extends State<Admin> {
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors
+                    .white, // Adjust the background color of the circle avatar
+                child: Icon(
+                  Icons.account_circle, // Replace with the desired icon
+                  size: 64, // Adjust the size of the icon as needed
+                  color: Colors.blue, // Adjust the color of the icon
+                ),
               ),
               accountName: Text(
                 'Profile',
@@ -308,20 +327,24 @@ class _AdminState extends State<Admin> {
               ),
             ),
             ListTile(
-              title: const Text('View Profile'),
+              leading: Icon(Icons.person),
+              title: Text('Update Profile'),
               onTap: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UsersScreen(),
-                  ),*/
+                    builder: (context) => ProfileScreen1(
+                      userId: '',
+                    ), // Replace with your ProfileScreen widget
+                  ),
+                );
               },
             ),
             const Divider(),
             ListTile(
-              title: const Text('Users'),
+              leading: Icon(Icons.group),
+              title: Text('Users'),
               onTap: () {
-                // Navigate to the "Users" screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -332,48 +355,45 @@ class _AdminState extends State<Admin> {
             ),
             const Divider(),
             ListTile(
-              title: const Text('Businesses'),
+              leading: Icon(Icons.business),
+              title: Text('Businesses'),
               onTap: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UsersScreen(),
-                  ),*/
+                    builder: (context) =>
+                        BusinessesScreen(), // Replace with your BusinessesScreen widget
+                  ),
+                );
               },
             ),
             const Divider(),
             ListTile(
+              leading: Icon(Icons.shopping_cart), // Add the Shopping Cart Icon
               title: const Text('Orders'),
               onTap: () {
-                /*Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UsersScreen(),
-                  ),*/
+                // TODO: Implement the action for Orders
               },
             ),
             const Divider(),
             ListTile(
+              leading: Icon(Icons.payment), // Add the Payment Icon
               title: const Text('Payments'),
               onTap: () {
-                /*Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UsersScreen(),
-                  ),*/
+                // TODO: Implement the action for Payments
               },
             ),
             const Divider(),
             ListTile(
+              leading: Icon(Icons.star), // Add the Star Icon
               title: const Text('Ratings'),
               onTap: () {
-                /*Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const Signin(),
-                  ));*/
+                // TODO: Implement the action for Ratings
               },
             ),
             const Divider(),
             ListTile(
+              leading: Icon(Icons.logout),
               title: const Text(
                 'Sign out',
                 style: TextStyle(
@@ -392,10 +412,6 @@ class _AdminState extends State<Admin> {
           ],
         ),
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: toggleDrawer,
-        child: Icon(isDrawerOpen ? Icons.close : Icons.menu),
-      ),*/
     );
   }
 }
@@ -521,71 +537,69 @@ class UsersScreen extends StatelessWidget {
       ],
     );
   }
+}
 
-  void navigateToCreateUserScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CreateUserScreen()),
-    );
-  }
+void navigateToCreateUserScreen(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => CreateUserScreen()),
+  );
+}
 
-  void navigateToUpdateUserScreen(BuildContext context, String userId) {
-    // TODO: Implement navigation to the update user screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => UpdateUserScreen(userId)),
-    );
-  }
+void navigateToUpdateUserScreen(BuildContext context, String userId) {
+  // TODO: Implement navigation to the update user screen
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => UpdateUserScreen(userId)),
+  );
+}
 
-  void deleteUser(BuildContext context, String userId) async {
-    try {
-      // Check if the user document exists.
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
+void deleteUser(BuildContext context, String userId) async {
+  try {
+    // Check if the user document exists.
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
-      // If the user document does not exist, do not delete it.
-      if (!userDoc.exists) {
-        print('User document with ID $userId does not exist.');
-        return;
-      }
-
-      // Delete the user.
-      try {
-        await FirebaseAuth.instance.currentUser!.delete();
-        print('The user has been deleted.');
-      } on FirebaseAuthException catch (e) {
-        // Handle the exception.
-        print(e.message);
-      }
-
-      // Delete user from Firestore
-      await FirebaseFirestore.instance.collection('users').doc(userId).delete();
-      print('Deleted user with ID: $userId');
-
-      // Navigate back to the user screen
-      Navigator.pop(context);
-    } catch (e) {
-      print('Error deleting user: $e');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to delete user. Please try again.'),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+    // If the user document does not exist, do not delete it.
+    if (!userDoc.exists) {
+      print('User document with ID $userId does not exist.');
+      return;
     }
+
+    // Delete the user.
+    try {
+      await FirebaseAuth.instance.currentUser!.delete();
+      print('The user has been deleted.');
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception.
+      print(e.message);
+    }
+
+    // Delete user from Firestore
+    await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+    print('Deleted user with ID: $userId');
+
+    // Navigate back to the user screen
+    Navigator.pop(context);
+  } catch (e) {
+    print('Error deleting user: $e');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to delete user. Please try again.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -613,9 +627,6 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   void _createUser() async {
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text;
-
-      // Initialize the role variable.
-      role = _roleController.text;
 
       try {
         // Create a new user with email and password.
@@ -689,12 +700,31 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _roleController,
+              DropdownButtonFormField<String>(
+                value: role,
+                items: [
+                  DropdownMenuItem(
+                    value: 'normal_user',
+                    child: Text('Normal User'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'business_owner',
+                    child: Text('Business Owner'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'admin',
+                    child: Text('Admin'),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    role = value;
+                  });
+                },
                 decoration: InputDecoration(labelText: 'Role'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a role';
+                    return 'Please select a role';
                   }
                   return null;
                 },
@@ -802,12 +832,31 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
-                  child: TextFormField(
-                    controller: _roleController,
+                  child: DropdownButtonFormField<String>(
+                    value: _roleController.text,
                     decoration: InputDecoration(labelText: 'Role'),
+                    items: [
+                      DropdownMenuItem(
+                        value: 'normal_user',
+                        child: Text('Normal User'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'business_owner',
+                        child: Text('Business Owner'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'admin',
+                        child: Text('Admin'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _roleController.text = value!;
+                      });
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a role';
+                        return 'Please select a role';
                       }
                       return null;
                     },

@@ -18,9 +18,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:localbiz1/models/auto_complete_result.dart';
 import 'package:localbiz1/providers/search_places.dart';
 import 'package:localbiz1/screens/signin.dart';
+import 'package:localbiz1/screens/user/businesses.dart';
 import 'package:localbiz1/services/map_services.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_webservice/places.dart' as Places;
 
 import '../utils/authentication.dart';
 
@@ -62,9 +64,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   var radiusValue = 3000.0;
   var tappedPoint;
   List allFavoritePlaces = [];
-  bool filterActive = false; // Add this variable to track the filter state
 
   String tokenKey = '';
+  String selectedCategory = ''; // Initialize with an empty string
+  List<Map<String, dynamic>> filteredPlaces = [];
+  bool filterActive = false; // Define the filterActive variable
 
   //Page controller for the nice pageview
   late PageController _pageController;
@@ -75,6 +79,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool showBlankCard = false;
   bool isReviews = true;
   bool isPhotos = false;
+  bool showSearchBar = false;
 
   final key = 'AIzaSyBuD_taQ5FNMp3NjLi3S6V2pHRwL0LmD28';
 
@@ -83,13 +88,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   void toggleDrawer() {
     setState(() {
       isDrawerOpen = !isDrawerOpen;
-    });
-  }
-
-  // Add this function to toggle the filter state when the button is pressed
-  void _toggleFilter() {
-    setState(() {
-      filterActive = !filterActive;
     });
   }
 
@@ -168,50 +166,27 @@ class _HomePageState extends ConsumerState<HomePage> {
     String iconName;
     int iconSize = 75;
 
-    if (types.contains('accountancy'))
-      iconName = 'accountancy.png';
-    else if (types.contains('arts') ||
-        types.contains('crafts') ||
-        types.contains('gallery'))
+    if (types.contains('Art'))
       iconName = 'arts-crafts.png';
-    else if (types.contains('astrology'))
-      iconName = 'astrology.png';
-    else if (types.contains('automotive'))
+    else if (types.contains('Car dealers') ||
+        types.contains('Car wash') ||
+        types.contains('Car rental'))
       iconName = 'automotive.png';
-    else if (types.contains('bars') ||
-        types.contains('clubs') ||
-        types.contains('entertainment') ||
-        types.contains('pub'))
+    else if (types.contains('Bars') ||
+        types.contains('Nightlife') ||
+        types.contains('Pub'))
       iconName = 'bars.png';
-    else if (types.contains('birds'))
-      iconName = 'birds.png';
-    else if (types.contains('books'))
-      iconName = 'books-media.png';
-    else if (types.contains('brunch'))
-      iconName = 'breakfast-n-brunch.png';
-    else if (types.contains('business'))
+    else if (types.contains('Collections'))
       iconName = 'business.png';
-    else if (types.contains('cake') || types.contains('bakery'))
-      iconName = 'cake-shop.png';
-    else if (types.contains('clothes'))
+    else if (types.contains('Apparel'))
       iconName = 'clothings.png';
-    else if (types.contains('breakfast'))
+    else if (types.contains('Coffee'))
       iconName = 'coffee-n-tea.png';
-    else if (types.contains('commercial-places'))
-      iconName = 'commercial-places.png';
-    else if (types.contains('community'))
-      iconName = 'community.png';
     else if (types.contains('computer') ||
         types.contains('cyber') ||
         types.contains('internet') ||
         types.contains('printing'))
       iconName = 'computers.png';
-    else if (types.contains('concerts'))
-      iconName = 'concerts.png';
-    else if (types.contains('cookbooks'))
-      iconName = 'cookbooks.png';
-    else if (types.contains('default'))
-      iconName = 'default.png';
     else if (types.contains('dental') || types.contains('dentist'))
       iconName = 'dental.png';
     else if (types.contains('doctor') || types.contains('clinic'))
@@ -221,20 +196,10 @@ class _HomePageState extends ConsumerState<HomePage> {
         types.contains('university') ||
         types.contains('college'))
       iconName = 'education.png';
-    else if (types.contains('electronics'))
+    else if (types.contains('Electronics') || types.contains('mobile'))
       iconName = 'electronics.png';
-    else if (types.contains('employment'))
-      iconName = 'employment.png';
-    else if (types.contains('engineering'))
-      iconName = 'engineering.png';
-    else if (types.contains('event'))
-      iconName = 'event.png';
-    else if (types.contains('exhibitions'))
-      iconName = 'exhibitions.png';
     else if (types.contains('fashion') || types.contains('shoe'))
       iconName = 'fashion.png';
-    else if (types.contains('festivals'))
-      iconName = 'festivals.png';
     else if (types.contains('financial-services') ||
         types.contains('finance') ||
         types.contains('bank') ||
@@ -243,35 +208,30 @@ class _HomePageState extends ConsumerState<HomePage> {
     else if (types.contains('food') ||
         types.contains('restaurant') ||
         types.contains('fast-food') ||
-        types.contains('grill'))
+        types.contains('grill') ||
+        types.contains('Takeout') ||
+        types.contains('Pizza') ||
+        types.contains('Smocha'))
       iconName = 'food.png';
-    else if (types.contains('furniture-stores'))
-      iconName = 'furniture-stores.png';
-    else if (types.contains('games'))
-      iconName = 'games.png';
     else if (types.contains('gift') || types.contains('flowers'))
       iconName = 'gifts-flowers.png';
     else if (types.contains('government'))
       iconName = 'government.png';
-    else if (types.contains('halloween'))
-      iconName = 'halloween.png';
     else if (types.contains('health-medical') || types.contains('hospital'))
       iconName = 'health-medical.png';
-    else if (types.contains('home-services') || types.contains('plumbing'))
+    else if (types.contains('home-services') ||
+        types.contains('plumbing') ||
+        types.contains('Home & garden'))
       iconName = 'home-services.png';
-    else if (types.contains('hotel'))
+    else if (types.contains('Hotels'))
       iconName = 'hotels.png';
-    else if (types.contains('industries'))
-      iconName = 'industries.png';
     else if (types.contains('jewelry'))
       iconName = 'jewelry.png';
-    else if (types.contains('jobs'))
-      iconName = 'jobs.png';
-    else if (types.contains('karaoke'))
+    else if (types.contains('karaoke') || types.contains('Live music'))
       iconName = 'karaoke.png';
     else if (types.contains('law') || types.contains('court'))
       iconName = 'law.png';
-    else if (types.contains('library'))
+    else if (types.contains('library') || types.contains('libraries'))
       iconName = 'libraries.png';
     else if (types.contains('local-services') || types.contains('garage'))
       iconName = 'local-services.png';
@@ -279,86 +239,41 @@ class _HomePageState extends ConsumerState<HomePage> {
       iconName = 'lounges.png';
     else if (types.contains('magazine') || types.contains('newspaper'))
       iconName = 'magazines.png';
-    else if (types.contains('manufacturing'))
-      iconName = 'manufacturing.png';
-    else if (types.contains('marker-new1_12'))
-      iconName = 'marker-new1_12.png';
     else if (types.contains('mass-media'))
       iconName = 'mass-media.png';
-    else if (types.contains('massage-therapy'))
+    else if (types.contains('massage') || types.contains('spa'))
       iconName = 'massage-therapy.png';
-    else if (types.contains('matrimonial'))
-      iconName = 'matrimonial.png';
-    else if (types.contains('medical') || types.contains('chemist'))
+    else if (types.contains('medical') ||
+        types.contains('chemist') ||
+        types.contains('Pharmacies'))
       iconName = 'medical.png';
-    else if (types.contains('meetups'))
-      iconName = 'meetups.png';
-    else if (types.contains('miscellaneous-for-sale'))
-      iconName = 'miscellaneous-for-sale.png';
-    else if (types.contains('mobile-phones'))
-      iconName = 'mobile-phones.png';
-    else if (types.contains('movies') || types.contains('cinema'))
+    else if (types.contains('Movies') || types.contains('cinema'))
       iconName = 'movies.png';
-    else if (types.contains('museum'))
+    else if (types.contains('Museums'))
       iconName = 'museums.png';
-    else if (types.contains('musical-instruments'))
-      iconName = 'musical-instruments.png';
-    else if (types.contains('musical'))
-      iconName = 'musical.png';
-    else if (types.contains('nightlife'))
-      iconName = 'nightlife.png';
-    else if (types.contains('parks') ||
+    else if (types.contains('Parks') ||
         types.contains('garden') ||
         types.contains('lawn'))
       iconName = 'parks.png';
-    else if (types.contains('parties'))
-      iconName = 'parties.png';
     else if (types.contains('pets') || types.contains('veterinary'))
       iconName = 'pets.png';
-    else if (types.contains('photography'))
-      iconName = 'photography.png';
-    else if (types.contains('pizza'))
-      iconName = 'pizza.png';
-    else if (types.contains('play-schools'))
-      iconName = 'play-schools.png';
-    else if (types.contains('playgrounds'))
-      iconName = 'playgrounds.png';
-    else if (types.contains('pool-halls'))
-      iconName = 'pool-halls.png';
-    else if (types.contains('professional'))
+    else if (types.contains('Dry cleaning'))
       iconName = 'professional.png';
-    else if (types.contains('real-estate'))
-      iconName = 'real-estate.png';
-    else if (types.contains('religious-organizations'))
-      iconName = 'religious-organizations.png';
-    else if (types.contains('residential-places') ||
-        types.contains('estate') ||
-        types.contains('apartments'))
-      iconName = 'residential-places.png';
     else if (types.contains('retail-stores') ||
         types.contains('supermarkert') ||
         types.contains('market') ||
-        types.contains('store'))
+        types.contains('store') ||
+        types.contains('Shopping centers'))
       iconName = 'retail-stores.png';
-    else if (types.contains('saloon') ||
-        types.contains('barber')) // Include 'barber'
+    else if (types.contains('Barber') ||
+        types.contains('Beauty supplies') ||
+        types.contains('Beauty salons')) // Include 'barber'
       iconName = 'saloon.png';
-    else if (types.contains('science'))
-      iconName = 'science.png';
-    else if (types.contains('shopping') || types.contains('grocery'))
+    else if (types.contains('Convenience stores') ||
+        types.contains('Groceries'))
       iconName = 'shopping.png';
-    else if (types.contains('sporting-goods'))
-      iconName = 'sporting-goods.png';
-    else if (types.contains('sports'))
+    else if (types.contains('Sports') || types.contains('Sporting goods'))
       iconName = 'sports.png';
-    else if (types.contains('swimming-pool'))
-      iconName = 'swimming-pools.png';
-    else if (types.contains('telemarketing'))
-      iconName = 'telemarketing.png';
-    else if (types.contains('tickets'))
-      iconName = 'tickets.png';
-    else if (types.contains('tiffin-services'))
-      iconName = 'tiffin-services.png';
     else if (types.contains('tires-accessories') ||
         types.contains('tires') ||
         types.contains('tyres'))
@@ -367,16 +282,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       iconName = 'tools-hardware.png';
     else if (types.contains('tours'))
       iconName = 'tours.png';
-    else if (types.contains('toys-store'))
-      iconName = 'toys-store.png';
-    else if (types.contains('transport'))
-      iconName = 'transport.png';
-    else if (types.contains('travel'))
-      iconName = 'travel.png';
-    else if (types.contains('tutors'))
-      iconName = 'tutors.png';
-    else if (types.contains('vacant-land'))
-      iconName = 'vacant-land.png';
     else
       iconName = 'default.png';
 
@@ -437,6 +342,53 @@ class _HomePageState extends ConsumerState<HomePage> {
     } else {
       placeImg = '';
     }
+  }
+
+/* Fetch places from Google Maps based on category
+  void _fetchPlaces(String category) async {
+    // Replace 'YOUR_GOOGLE_MAPS_API_KEY' with your actual API key
+    final places = Places.GoogleMapsPlaces(apiKey: 'YOUR_GOOGLE_MAPS_API_KEY');
+
+    try {
+      // Get user's current location using the helper function
+      Position position = await _determinePosition();
+
+      // Fetch places near the user's location based on the category
+      final response = await places.searchNearbyWithRadius(
+        Location(
+          lat: position.latitude,
+          lng: position.longitude,
+        ),
+        5000, // 5000 meters (adjust as needed)
+        type: category,
+      );
+
+      // Clear existing markers
+      setState(() {
+        _markers.clear();
+      });
+
+      // Add new markers to the map
+      setState(() {
+        _markers.addAll(response.results.map((result) {
+          return Marker(
+            markerId: MarkerId(result.name),
+            position: LatLng(
+                result.geometry.location.lat, result.geometry.location.lng),
+            infoWindow: InfoWindow(title: result.name),
+          );
+        }).toList());
+      });
+    } catch (e) {
+      // Handle errors related to location services or permissions
+      print("Error: $e");
+    }
+  }*/
+
+  void _onCategoryChanged(String value) {
+    setState(() {
+      selectedCategory = value;
+    });
   }
 
   Future<Position> _determinePosition() async {
@@ -523,6 +475,46 @@ class _HomePageState extends ConsumerState<HomePage> {
                     },
                   ),
                 ),
+                Visibility(
+                  visible: showSearchBar,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 90.0, left: 15.0, right: 15.0, bottom: 5.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.white,
+                          ),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20.0,
+                                vertical: 15.0,
+                              ),
+                              border: InputBorder.none,
+                              hintText: 'Enter category',
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    showSearchBar = false;
+                                    searchController.clear();
+                                  });
+                                },
+                                icon: Icon(Icons.clear),
+                              ),
+                            ),
+                            onChanged: _onCategoryChanged,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
                 searchToggle
                     ? Padding(
                         padding:
@@ -1097,9 +1089,18 @@ class _HomePageState extends ConsumerState<HomePage> {
               icon: Icon(Icons.location_history),
             ),
             IconButton(
-              onPressed: _toggleFilter, // Toggle the filter state
+              onPressed: () {
+                setState(() {
+                  showSearchBar = !showSearchBar;
+                  // Clear the search field when the search bar is hidden
+                  if (!showSearchBar) {
+                    searchController.clear();
+                  }
+                });
+              },
               icon: Icon(Icons.filter_list),
             ),
+
             // Add the additional floating action button for the drawer.
             IconButton(
               onPressed: () {
@@ -1113,36 +1114,36 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
+            UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'User Profile',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      userEmail, // Display the user's email retrieved from Firebase
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors
+                    .white, // Adjust the background color of the circle avatar
+                child: Icon(
+                  Icons.account_circle, // Replace with the desired icon
+                  size: 64, // Adjust the size of the icon as needed
+                  color: Colors.blue, // Adjust the color of the icon
+                ),
+              ),
+              accountName: Text(
+                'User Profile',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+              accountEmail: Text(
+                userEmail, // Display the user's email retrieved from Firebase
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
                 ),
               ),
             ),
             ListTile(
+              leading: Icon(Icons.person), // Icon for updating profile
               title: const Text('Update Profile'),
               onTap: () {
                 Navigator.push(
@@ -1157,20 +1158,28 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             const Divider(),
             ListTile(
-              title: const Text('Saved Businesses'),
+              leading: Icon(Icons.business), // Icon for saved businesses
+              title: const Text('Businesses'),
               onTap: () {
-                // TODO: Implement the navigation to the saved businesses screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BusinessesDashboard(),
+                  ),
+                );
               },
             ),
             const Divider(),
             ListTile(
+              leading: Icon(Icons.payment), // Icon for payments
               title: const Text('Payments'),
               onTap: () {
-                // TODO: Implement the navigation to the saved businesses screen
+                // TODO: Implement the navigation to the payments screen
               },
             ),
             const Divider(),
             ListTile(
+              leading: Icon(Icons.logout), // Icon for signing out
               title: const Text(
                 'Sign out',
                 style: TextStyle(
