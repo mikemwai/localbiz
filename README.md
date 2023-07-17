@@ -44,7 +44,10 @@ Run the following command to install the dependencies:
 
 
 ## Contact Us
-If you have an issues with the project,please feel free to open up an issue.
+If you have an issues with the project,please feel free to open up an issue through the link below.
+```sh
+  https://github.com/mikemwai/localbiz1/issues
+  ```
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
