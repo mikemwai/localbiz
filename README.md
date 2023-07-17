@@ -2,6 +2,7 @@
 
 Localbiz is an  app that transforms how users discover and engage with local businesses. It utilizes location-based technology, guides users to nearby establishments, and enables secure payments within the platform. By empowering local businesses with comprehensive profiles, it enhances visibility and fosters economic growth. Experience the future of local business engagement with Localbiz, where convenience, connectivity, and commerce converge.
 
+
 To install the project do the following:
 1. Fork the project to create a copy of the project in your own Github account.
 To fork on github CLI use the following command: 
@@ -25,6 +26,8 @@ To fork on github CLI use the following command:
 ```sh
  flutter run
   ```
+
+
 
 
 
