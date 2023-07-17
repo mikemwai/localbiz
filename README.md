@@ -16,7 +16,7 @@ To fork on github CLI use the following command:
 5. Install the dependencies by running the command  to get the necessary packages and dependencies: 
 
 ```sh
-  fluter pub get
+  flutter pub get
   ```
 
 
