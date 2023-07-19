@@ -40,15 +40,15 @@ class _VerifyScreenState extends State<VerifyScreen> {
         centerTitle: true,
         elevation: 10,
         title:
-            Text('Verify Email', style: TextStyle(fontFamily: 'MyCustomFont')),
+            const Text('Verify Email', style: TextStyle(fontFamily: 'MyCustomFont')),
       ),
       body: Container(
         color: Colors.lightBlue[100], // Add a light blue background color
-        padding: EdgeInsets.all(20), // Add padding around the text
+        padding: const EdgeInsets.all(20), // Add padding around the text
         child: Center(
           child: Text(
             'An email has been sent to ${user!.email} please verify',
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'MyCustomFont',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

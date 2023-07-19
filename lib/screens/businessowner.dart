@@ -1,14 +1,13 @@
 // business_owner.dart
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, unnecessary_import
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:localbiz1/screens/businessowner/businessprofile.dart';
-import 'package:localbiz1/screens/user/businesses.dart';
+import 'package:localbiz1/screens/businessowner/orders.dart';
 import '../utils/authentication.dart';
-import 'admin/profile_screen1.dart';
 import 'businessowner/profile_screen2.dart';
 import 'signin.dart';
 
@@ -216,16 +215,28 @@ class _BusinessOwnerState extends State<BusinessOwner> {
             ListTile(
               leading: Icon(Icons.shopping_bag),
               title: const Text('Products'),
-              onTap: () {
-                // TODO: Implement the navigation to the products screen
-              },
+              /*onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Order(),
+                  ),
+                );
+              },*/
             ),
             const Divider(),
             ListTile(
               leading: Icon(Icons.shopping_cart),
               title: const Text('Orders'),
               onTap: () {
-                // TODO: Implement the navigation to the orders screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderView(
+                      orderId: '',
+                    ),
+                  ),
+                );
               },
             ),
             const Divider(),

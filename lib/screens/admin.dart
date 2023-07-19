@@ -5,8 +5,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:localbiz1/screens/homepage.dart';
-import 'package:localbiz1/screens/user/profile_screen3.dart';
 import '../utils/authentication.dart';
 import 'admin/businesses.dart';
 import 'signin.dart';
@@ -83,8 +81,8 @@ class _AdminState extends State<Admin> {
     hintColor: Colors.teal, // Replace with your desired accent color
     fontFamily: 'Roboto', // Replace with your desired font
     textTheme: TextTheme(
-      headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      bodyText1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     ),
   );
 
@@ -137,12 +135,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Users',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -185,12 +183,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Businesses',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount1',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -242,12 +240,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Orders',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount2',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -292,12 +290,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Payments',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount3',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),

@@ -1,7 +1,6 @@
 // ignore_for_file: unused_import, curly_braces_in_flow_control_structures, prefer_const_constructors
 
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 //import 'dart:ffi';
 
@@ -59,7 +58,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Set<Marker> _markersDupe = <Marker>{};
   Set<Polyline> _polylines = <Polyline>{};
   //Circle
-  Set<Circle> _circles = Set<Circle>();
+  Set<Circle> _circles = <Circle>{};
   int markerIdCounter = 1;
   int polylineIdCounter = 1;
   var radiusValue = 3000.0;
@@ -665,7 +664,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       horizontal: 20.0, vertical: 15.0),
                                   border: InputBorder.none,
                                   hintText: 'Destination',
-                                  suffixIcon: Container(
+                                  suffixIcon: SizedBox(
                                       width: 96.0,
                                       child: Row(
                                         children: [
@@ -752,7 +751,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                               placesResult['next_page_token'] ??
                                                   'none';
                                           _markers = {};
-                                          placesWithin.forEach((element) {
+                                          for (var element in placesWithin) {
                                             _setNearMarker(
                                               LatLng(
                                                   element['geometry']
@@ -764,7 +763,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                               element['business_status'] ??
                                                   'not available',
                                             );
-                                          });
+                                          }
                                           _markersDupe = _markers;
                                           pressedNear = true;
                                         });
@@ -795,7 +794,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                     'next_page_token'] ??
                                                 'none';
 
-                                            placesWithin.forEach((element) {
+                                            for (var element in placesWithin) {
                                               _setNearMarker(
                                                 LatLng(
                                                     element['geometry']
@@ -807,7 +806,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                 element['business_status'] ??
                                                     'not available',
                                               );
-                                            });
+                                            }
                                           } else {
                                             print('Thats all folks!!');
                                           }
@@ -836,7 +835,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 pressedNear
                     ? Positioned(
                         bottom: 20.0,
-                        child: Container(
+                        child: SizedBox(
                           height: 200.0,
                           width: MediaQuery.of(context).size.width,
                           child: PageView.builder(
@@ -889,7 +888,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             fontSize: 12.0,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      Container(
+                                      SizedBox(
                                           width: 105.0,
                                           child: Text(
                                             tappedPlaceDetail[
@@ -918,7 +917,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             fontSize: 12.0,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      Container(
+                                      SizedBox(
                                           width: 105.0,
                                           child: Text(
                                             tappedPlaceDetail[
@@ -1012,7 +1011,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     ],
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   height: 250.0,
                                   child: isReviews
                                       ? ListView(
@@ -1215,7 +1214,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
               onTap: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
                   try {
                     // After successful sign-out, navigate to the sign-in page
@@ -1255,7 +1254,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               SizedBox(width: 4.0),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Container(
+                SizedBox(
                   width: 160.0,
                   child: Text(
                     review['author_name'],
@@ -1374,7 +1373,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             Text(
-              '$tempDisplayIndex/' + photoElement.length.toString(),
+              '$tempDisplayIndex/${photoElement.length}',
               style: TextStyle(
                   fontFamily: 'WorkSans',
                   fontSize: 12.0,
@@ -1484,7 +1483,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 width: 275.0,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                           color: Colors.black54,
                           offset: Offset(0.0, 4.0),
@@ -1528,7 +1527,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 170.0,
                             child: Text(allFavoritePlaces[index]['name'],
                                 style: TextStyle(
@@ -1563,7 +1562,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             starOffColor: const Color(0xffe7e8ea),
                             starColor: Colors.yellow,
                           ),
-                          Container(
+                          SizedBox(
                             width: 170.0,
                             child: Text(
                               allFavoritePlaces[index]['business_status'] ??

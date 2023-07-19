@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_null_comparison, non_constant_identifier_names, use_build_context_synchronously
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -232,6 +230,8 @@ class BusinessesScreen extends StatelessWidget {
 }
 
 class CreateBusinessScreen extends StatelessWidget {
+  const CreateBusinessScreen({super.key});
+
   // TODO: Implement the UI and logic for creating a new business
   @override
   Widget build(BuildContext context) {

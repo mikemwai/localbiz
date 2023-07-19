@@ -2,8 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:localbiz1/screens/signin.dart';
-import 'package:localbiz1/screens/signup.dart';
 import '../utils/authentication.dart';
 
 class BusinessSignup extends StatefulWidget {

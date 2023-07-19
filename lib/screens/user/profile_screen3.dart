@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
 import '../../utils/authentication.dart';
-import '../businessowner/profile_screen2.dart';
 import '../homepage.dart';
 import '../signin.dart';
 import 'businesses.dart';
@@ -242,7 +241,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                 ),
               ),
               onTap: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
                   try {
                     // After successful sign-out, navigate to the sign-in page

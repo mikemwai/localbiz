@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_const_constructors
 
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,8 @@ import 'package:lottie/lottie.dart';
 import '../app_export.dart';
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -80,7 +81,7 @@ class SplashScreen extends StatelessWidget {
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Container(
+                  child: SizedBox(
                     height: 150.0,
                     width: 150.0,
                     child: LottieBuilder.asset(

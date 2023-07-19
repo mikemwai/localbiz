@@ -181,7 +181,7 @@ class _BusinessesDashboardState extends State<BusinessesDashboard> {
                 ),
               ),
               onTap: () {
-                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
                   Authentication.signout(context: context);
                   try {
                     // After successful sign-out, navigate to the sign-in page
@@ -210,7 +210,7 @@ class BusinessCard extends StatelessWidget {
   final String phoneNo;
   final String operatingHours;
 
-  const BusinessCard({
+  const BusinessCard({super.key, 
     required this.name,
     required this.category,
     required this.phoneNo,

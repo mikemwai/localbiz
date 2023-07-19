@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:localbiz1/screens/businessowner.dart';
