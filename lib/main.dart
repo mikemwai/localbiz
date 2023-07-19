@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //Mobile App Code
 /*void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //Authentication.initializeFirebase();
+  Authentication.initializeFirebase();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(Colors.blue));
         });
   }
-}
-*/
+}*/
+
 //Web App Code
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

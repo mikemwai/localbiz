@@ -19,6 +19,7 @@ import 'package:localbiz1/models/auto_complete_result.dart';
 import 'package:localbiz1/providers/search_places.dart';
 import 'package:localbiz1/screens/signin.dart';
 import 'package:localbiz1/screens/user/businesses.dart';
+import 'package:localbiz1/screens/user/profile_screen3.dart';
 import 'package:localbiz1/services/map_services.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1143,6 +1144,33 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        HomePage(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('View Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen3(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            /*ListTile(
               leading: Icon(Icons.person), // Icon for updating profile
               title: const Text('Update Profile'),
               onTap: () {
@@ -1155,7 +1183,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 );
               },
-            ),
+            ),*/
             const Divider(),
             ListTile(
               leading: Icon(Icons.business), // Icon for saved businesses

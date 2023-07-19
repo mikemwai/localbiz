@@ -3,17 +3,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:localbiz1/screens/signin.dart';
+import 'package:localbiz1/screens/signup.dart';
 import '../utils/authentication.dart';
-import 'businessownersignup.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class BusinessSignup extends StatefulWidget {
+  const BusinessSignup({Key? key}) : super(key: key);
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<BusinessSignup> createState() => _BusinessSignupState();
 }
 
-class _SignupState extends State<Signup> {
+class _BusinessSignupState extends State<BusinessSignup> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
@@ -49,7 +49,7 @@ class _SignupState extends State<Signup> {
               ),
               const Center(
                 child: Text(
-                  'Registration',
+                  'Business Registration',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -210,37 +210,13 @@ class _SignupState extends State<Signup> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const Signin(),
-                    ));
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     'Go Back!',
                     style: TextStyle(
                       fontSize: 18,
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const BusinessSignup(),
-                  ));
-                },
-                child: Text(
-                  'Register your business today!',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    decoration:
-                        TextDecoration.underline, // Add underline decoration
                   ),
                 ),
               ),
@@ -297,7 +273,7 @@ class _SignupState extends State<Signup> {
         },
       );
     } else {
-      Authentication.signup(context, email, password);
+      Authentication.businesssignup(context, email, password);
       _showSuccessSnackBar(); // Show success snackbar
     }
   }
@@ -305,7 +281,8 @@ class _SignupState extends State<Signup> {
   void _showSuccessSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Registration successful!'), // Message to display
+        content:
+            Text('Business Registration successful!'), // Message to display
         duration:
             Duration(seconds: 2), // Duration for which the snackbar is visible
         behavior: SnackBarBehavior.floating,

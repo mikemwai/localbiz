@@ -58,6 +58,8 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   permission_handler: ^10.4.3
   google_maps_webservice: ^0.0.20-nullsafety.5
+  lottie:
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +91,7 @@ flutter:
     - assets/google.png
     - assets/splash.png
     - assets/mapicons/
+    - assets/animassets/mapanimation.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
