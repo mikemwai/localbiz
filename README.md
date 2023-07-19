@@ -1,6 +1,7 @@
-# localbiz:a flutter-based mobile application that enables seamless local business discovery.
+# localbiz: A flutter-based mobile application that enables seamless local business discovery.
 
 Localbiz is an  app that transforms how users discover and engage with local businesses. It utilizes location-based technology, guides users to nearby establishments, and enables secure payments within the platform. By empowering local businesses with comprehensive profiles, it enhances visibility and fosters economic growth. Experience the future of local business engagement with Localbiz, where convenience, connectivity, and commerce converge.
+
 
 To install the project do the following:
 1. Fork the project to create a copy of the project in your own Github account.
@@ -16,7 +17,7 @@ To fork on github CLI use the following command:
 5. Install the dependencies by running the command  to get the necessary packages and dependencies: 
 
 ```sh
-  fluter pub get
+  flutter pub get
   ```
 
 
@@ -29,22 +30,22 @@ To fork on github CLI use the following command:
 
 
 
+
+
 The project utilizes Firebase as the database.To set up the database,follow these steps:
-1. Create a Firebase project at [https://console.firebase.google.com](https://console.firebase.google.com).
+1. Create a Firebase project at 
+   (https://console.firebase.google.com).
 2. Enable Firebase Authentication and configure the desired sign-in methods.
 3. Set up the Firestore database and Firestore rules according to your requirements.
 
 
-Before running the application,make sure you have the necessary dependencies installed.
-Run the following command to install the dependencies:
-
-  ```sh
-  sh install_dependecies.sh
-  ```
 
 
 ## Contact Us
-If you have an issues with the project,please feel free to open up an issue.
+If you have an issues with the project,please feel free to open up an issue through the link below.
+
+ (https://github.com/mikemwai/localbiz1/issues)
+
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
