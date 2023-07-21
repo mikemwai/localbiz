@@ -1,19 +1,18 @@
-# localbiz: A flutter-based mobile application that enables seamless local business discovery.
+# localbiz: A flutter-based mobile application that enables seamless local business discovery and directories.
 
-Localbiz is an  app that transforms how users discover and engage with local businesses. It utilizes location-based technology, guides users to nearby establishments, and enables secure payments within the platform. By empowering local businesses with comprehensive profiles, it enhances visibility and fosters economic growth. Experience the future of local business engagement with Localbiz, where convenience, connectivity, and commerce converge.
+Localbiz is an  application transforming how users discover and engage with local businesses. It utilizes location-based technology, guides users to nearby establishments, and enables secure payments within the platform. By empowering local businesses with comprehensive profiles, it enhances visibility and fosters economic growth. Experience the future of local business engagement with Localbiz, where convenience, connectivity, and commerce converge.
 
 
 To install the project do the following:
-1. Fork the project to create a copy of the project in your own Github account.
-To fork on github CLI use the following command: 
+1. Fork the project to create a copy of the project in your own Github account through the GitHub CLI as shown below:
 
 ```sh
   gh repo fork OWNER/REPO
   ```
 
 2. Download the project as a zip file from your forked repository and extract its contents.
-3. Enable developer settings on your Andriod phone to allow installation of applications from unkwon sources. This will enable USB debugging.
-4. Open the project in your preffered IDE such as VisualStudio Code.
+3. Enable developer settings on your Android phone to allow the installation of applications from unknown sources. This will enable USB debugging.
+4. Open the project in your preferred IDE such as VisualStudio Code.
 5. Install the dependencies by running the command  to get the necessary packages and dependencies: 
 
 ```sh
@@ -21,7 +20,7 @@ To fork on github CLI use the following command:
   ```
 
 
-6. Run the application by executing the command in the terminal to build and run the application on your connected Andriod device as shown below:  
+6. Run the application by executing the command in the terminal to build and run the application on your connected Android device as shown below:  
 
 ```sh
  flutter run
@@ -32,7 +31,7 @@ To fork on github CLI use the following command:
 
 
 
-The project utilizes Firebase as the database.To set up the database,follow these steps:
+The project utilizes Firebase as the database. To set up the database, follow these steps:
 1. Create a Firebase project at 
    (https://console.firebase.google.com).
 2. Enable Firebase Authentication and configure the desired sign-in methods.
@@ -42,7 +41,7 @@ The project utilizes Firebase as the database.To set up the database,follow thes
 
 
 ## Contact Us
-If you have an issues with the project,please feel free to open up an issue through the link below.
+If you have any issues with the project, please feel free to open up an issue through the link below.
 
  (https://github.com/mikemwai/localbiz1/issues)
 
