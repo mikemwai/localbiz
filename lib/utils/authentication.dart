@@ -40,31 +40,56 @@ class Authentication {
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
 
-    //if (googleSignInAccount != null) {
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken);
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken);
 
-    try {
-      final UserCredential userCredential =
-          await auth.signInWithCredential(credential);
-      route(context); // Pass the context parameter to the route method
-      //Navigator.pushReplacement(
-      //context, MaterialPageRoute(builder: (context) => const HomePage()));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        //handle error
-        print('account exist with different credential');
-      } else if (e.code == 'invalid-credential') {
-        //handle error
-        print('invalid credential');
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+
+        // Get the user details from the UserCredential object
+        final User? user = userCredential.user;
+
+        if (user != null) {
+          // Check if the user already exists in the 'users' collection
+          final userDocRef =
+              FirebaseFirestore.instance.collection('users').doc(user.uid);
+          final userDocSnapshot = await userDocRef.get();
+
+          if (!userDocSnapshot.exists) {
+            // If the user doesn't exist, add them to the 'users' collection
+            await userDocRef.set({
+              'fname': '',
+              'lname': '',
+              'phoneno': '',
+              'email': user.email,
+              'role': 'normal_user',
+            });
+          }
+        }
+
+        route(context);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const HomePage()),
+        // );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          // handle error
+          print('account exists with different credential');
+        } else if (e.code == 'invalid-credential') {
+          // handle error
+          print('invalid credential');
+        }
+      } catch (e) {
+        // handle error
+        print('something else');
       }
-    } catch (e) {
-      //handle error
-      print('something else');
     }
   }
 
@@ -100,6 +125,65 @@ class Authentication {
         'phoneno': '',
         'email': email,
         'role': 'normal_user',
+      };
+
+      // Write the document to Firestore.
+      await documentReference.set(data);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const VerifyScreen()),
+      );
+    } catch (error) {
+      // Handle signup errors
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Signup Error'),
+            content: Text('Failed to sign up: $error'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      print('Error signing up: $error');
+    }
+  }
+
+  static Future<void> businesssignup(
+    BuildContext context,
+    String email,
+    String password,
+    //String userId,
+  ) async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Create a new user with email and password.
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      // Get the user id.
+      final uid = userCredential.user!.uid;
+
+      // Create a document reference in Firestore.
+      final documentReference =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      // Set the document data.
+      Map<String, dynamic> data = {
+        'fname': '',
+        'lname': '',
+        'phoneno': '',
+        'email': email,
+        'role': 'business_owner',
       };
 
       // Write the document to Firestore.

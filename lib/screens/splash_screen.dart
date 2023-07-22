@@ -1,13 +1,15 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unnecessary_import
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors
 
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localbiz1/screens/signin.dart';
+import 'package:lottie/lottie.dart';
 import '../app_export.dart';
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -44,33 +46,52 @@ class SplashScreen extends StatelessWidget {
               ),
             ),
           ),
-          child: Container(
-            width: double.maxFinite,
-            padding: getPadding(
-              left: 75,
-              right: 75,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: getPadding(
-                    bottom: 5,
-                  ),
-                  child: Text(
-                    "LocalBiz",
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 255, 253, 253),
+          child: Stack(
+            children: [
+              Container(
+                width: double.maxFinite,
+                padding: getPadding(
+                  left: 75,
+                  right: 40,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: getPadding(
+                        bottom: 5,
+                        right:
+                            0, // Adjust the value to adjust how far the text is from the right margin
+                      ),
+                      child: Text(
+                        "LocalBiz",
+                        overflow: TextOverflow.ellipsis,
+                        //textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 255, 253, 253),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SizedBox(
+                    height: 150.0,
+                    width: 150.0,
+                    child: LottieBuilder.asset(
+                      'assets/animassets/mapanimation.json',
+                      // Replace with the correct path to your animation JSON file
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

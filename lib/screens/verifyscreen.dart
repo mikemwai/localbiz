@@ -37,12 +37,24 @@ class _VerifyScreenState extends State<VerifyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          elevation: 10,
-          //backgroundColor: Colors.black45,
-          title: const Text('Verify Email')),
-      body: Center(
-        child: Text('An email has been sent to ${user!.email} please verify'),
+        centerTitle: true,
+        elevation: 10,
+        title:
+            const Text('Verify Email', style: TextStyle(fontFamily: 'MyCustomFont')),
+      ),
+      body: Container(
+        color: Colors.lightBlue[100], // Add a light blue background color
+        padding: const EdgeInsets.all(20), // Add padding around the text
+        child: Center(
+          child: Text(
+            'An email has been sent to ${user!.email} please verify',
+            style: const TextStyle(
+                fontFamily: 'MyCustomFont',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue),
+          ),
+        ),
       ),
     );
   }
@@ -52,7 +64,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
     await user!.reload();
     if (user!.emailVerified) {
       timer.cancel();
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomePage()));
     }

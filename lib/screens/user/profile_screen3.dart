@@ -1,23 +1,23 @@
-// ignore_for_file: prefer_const_constructors
+// business_owner.dart
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:localbiz1/screens/user/profile_screen3.dart';
-
 import '../../utils/authentication.dart';
 import '../homepage.dart';
 import '../signin.dart';
+import 'businesses.dart';
 
-class BusinessesDashboard extends StatefulWidget {
-  const BusinessesDashboard({Key? key}) : super(key: key);
+class ProfileScreen3 extends StatefulWidget {
+  const ProfileScreen3({Key? key}) : super(key: key);
 
   @override
-  _BusinessesDashboardState createState() => _BusinessesDashboardState();
+  _ProfileScreen3State createState() => _ProfileScreen3State();
 }
 
-class _BusinessesDashboardState extends State<BusinessesDashboard> {
+class _ProfileScreen3State extends State<ProfileScreen3> {
   String email = ''; // Changed userEmail to email
   String userId = ''; // Add userId variable here
 
@@ -41,41 +41,102 @@ class _BusinessesDashboardState extends State<BusinessesDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Businesses'),
+        title: const Text('Profile'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('businesses').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final businesses = snapshot.data!.docs;
-            return ListView.builder(
-              itemCount: businesses.length,
-              itemBuilder: (context, index) {
-                final business =
-                    businesses[index].data() as Map<String, dynamic>;
-                final String name = business['name'] ?? '';
-                final String category = business['category'] ?? '';
-                final String phoneNo = business['phone_no'] ?? '';
-                final String operatingHours = business['operating_hours'] ?? '';
+      body: Center(
+        // Wrap the ListView with Center widget
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId) // Assuming email is the document ID
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
 
-                return BusinessCard(
-                  name: name,
-                  category: category,
-                  phoneNo: phoneNo,
-                  operatingHours: operatingHours,
+              if (!snapshot.hasData || snapshot.data!.data() == null) {
+                // If the document with the provided email is not found or the data is null
+                return Center(
+                  child: Text('No profile data found'),
                 );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error fetching data'),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+              }
+
+              final user = snapshot.data!.data()! as Map<String, dynamic>;
+              final String? fname = user['fname'] as String?;
+              final String? lname = user['lname'] as String?;
+              final String? phoneno = user['phoneno'] as String?;
+              final String? email = user['email'] as String?;
+
+              return ListView(
+                children: [
+                  Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Profile Information',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(Icons.person),
+                            title: Text('First Name: $fname'),
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(Icons.person),
+                            title: Text('Last Name: $lname'),
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(Icons.phone),
+                            title: Text('Phone Number: $phoneno'),
+                          ),
+                          Divider(),
+                          ListTile(
+                            leading: Icon(Icons.email),
+                            title: Text('Email: $email'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 50, // Set the desired height here
+                    width: MediaQuery.of(context).size.width *
+                        0.80, // Set the desired width here7
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                              userId: userId,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text('Update Profile'),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -122,7 +183,6 @@ class _BusinessesDashboardState extends State<BusinessesDashboard> {
                 );
               },
             ),
-            const Divider(),
             ListTile(
               leading: Icon(Icons.person),
               title: Text('View Profile'),
@@ -197,40 +257,6 @@ class _BusinessesDashboardState extends State<BusinessesDashboard> {
                 });
               },
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BusinessCard extends StatelessWidget {
-  final String name;
-  final String category;
-  final String phoneNo;
-  final String operatingHours;
-
-  const BusinessCard({super.key, 
-    required this.name,
-    required this.category,
-    required this.phoneNo,
-    required this.operatingHours,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: ListTile(
-        leading: Icon(Icons.business),
-        title: Text(name),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Category: $category'),
-            Text('Phone Number: $phoneNo'),
-            Text('Operating Hours: $operatingHours'),
           ],
         ),
       ),

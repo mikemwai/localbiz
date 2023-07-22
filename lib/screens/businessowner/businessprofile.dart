@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class ProfileScreen2 extends StatefulWidget {
-  const ProfileScreen2({Key? key, required this.email}) : super(key: key);
+class Businessprofile extends StatefulWidget {
+  const Businessprofile({Key? key, required this.email}) : super(key: key);
   final String email; // Define the named parameter email
 
   @override
-  State<ProfileScreen2> createState() => _ProfileScreenState2();
+  State<Businessprofile> createState() => _BusinessprofileState();
 }
 
-class _ProfileScreenState2 extends State<ProfileScreen2> {
+class _BusinessprofileState extends State<Businessprofile> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _operatingHoursController =
@@ -31,69 +31,48 @@ class _ProfileScreenState2 extends State<ProfileScreen2> {
 
     if (user != null) {
       String? email = user.email;
-
-      // Retrieve user details from Firestore using the provided userId
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('businesses')
-          .doc(email)
-          .get();
-
-      if (snapshot.exists) {
-        final business = snapshot.data() as Map<String, dynamic>;
-        final String? name = business['name'] as String?;
-        final String? category = business['category'] as String?;
-        final String? phoneNo = business['phone_no'] as String?;
-        final String? operatingHours = business['operating_hours'] as String?;
-
-        setState(() {
-          _nameController.text = name ?? '';
-          _categoryController.text = category ?? '';
-          _phoneController.text = phoneNo ?? '';
-          _operatingHoursController.text = operatingHours ?? '';
-        });
-      }
     }
   }
 
-  void _updateBusiness() {
+  void _createBusiness() async {
     if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text;
-      final String email = _emailController.text;
-      final String category = _categoryController.text;
-      final String phoneNo = _phoneController.text;
-      final String operatingHours = _operatingHoursController.text;
+      // Get the current user ID.
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final uid = user.uid;
 
-      // TODO: Implement business update logic using Firestore
-      updateBusinessInFirestore(name, email, category, phoneNo, operatingHours);
+        // Create a document reference in the "businesses" collection using the user's email as the document ID.
+        final documentReference = FirebaseFirestore.instance
+            .collection('businesses')
+            .doc(widget.email);
 
-      // Navigate back to the previous screen
-      Navigator.pop(context);
-    }
-  }
+        // Get the business details from the text controllers.
+        final String name = _nameController.text;
+        final String category = _categoryController.text;
+        final String phoneNo = _phoneController.text;
+        final String operatingHours = _operatingHoursController.text;
 
-  void updateBusinessInFirestore(String name, String email, String category,
-      String phoneNo, String operatingHours) async {
-    // Fetch the document ID associated with the provided email
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('businesses')
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
+        // Save the business details to Firestore.
+        await documentReference.set({
+          'name': name,
+          'category': category,
+          'phone_no': phoneNo,
+          'operating_hours': operatingHours,
+        });
 
-    if (querySnapshot.docs.isNotEmpty) {
-      String documentId = querySnapshot.docs.first.id;
+        // Show a toast to indicate that the business profile has been added.
+        Fluttertoast.showToast(
+          msg: 'Business profile added successfully!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.blue, // Set the background color of the toast
+          textColor: Colors.white, // Set the text color of the toast
+          fontSize: 16.0,
+        );
 
-      // Update the business details using the retrieved document ID
-      FirebaseFirestore.instance.collection('users').doc(widget.email).update({
-        'name': name,
-        'category': category,
-        'phone_no': phoneNo,
-        'operating_hours': operatingHours,
-      });
-
-      print('Business updated: name=$name, email=$email');
-    } else {
-      print('Business with email $email not found.');
+        // Navigate back to the previous screen
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -101,7 +80,7 @@ class _ProfileScreenState2 extends State<ProfileScreen2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Profile'),
+        title: const Text('Create Business Profile'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -125,14 +104,6 @@ class _ProfileScreenState2 extends State<ProfileScreen2> {
                     },
                   ),
                 ),
-                /*SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.80,
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    enabled: false, // Disable editing for the email TextField
-                  ),
-                ),*/
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
                   child: TextFormField(
@@ -177,15 +148,13 @@ class _ProfileScreenState2 extends State<ProfileScreen2> {
                 const SizedBox(height: 16.0),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
-                  height: 50, // Replace with your desired height
+                  height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15))),
-                    onPressed: () {
-                      _updateBusiness(); // Call the _updateBusiness function to save the profile data
-                    },
-                    child: const Text('Save'),
+                    onPressed: _createBusiness,
+                    child: const Text('Add'),
                   ),
                 ),
               ],

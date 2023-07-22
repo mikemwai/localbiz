@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:localbiz1/screens/homepage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../utils/authentication.dart';
 import 'admin/businesses.dart';
 import 'signin.dart';
@@ -81,8 +81,8 @@ class _AdminState extends State<Admin> {
     hintColor: Colors.teal, // Replace with your desired accent color
     fontFamily: 'Roboto', // Replace with your desired font
     textTheme: TextTheme(
-      headline6: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      bodyText1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     ),
   );
 
@@ -105,25 +105,25 @@ class _AdminState extends State<Admin> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 2.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Navigate to the "Users" screen
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UsersScreen(),
-                              ),
-                            );
-                          },
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigate to the "Users" screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UsersScreen(),
+                        ),
+                      );
+                    },
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 2.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -135,12 +135,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Users',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -153,25 +153,25 @@ class _AdminState extends State<Admin> {
                 SizedBox(width: 8),
                 Expanded(
                   flex: 1,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 2.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    BusinessesScreen(), // Replace with your BusinessesScreen widget
-                              ),
-                            );
-                          },
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BusinessesScreen(), // Replace with your BusinessesScreen widget
+                        ),
+                      );
+                    },
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 2.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -183,12 +183,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Businesses',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount1',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -208,19 +208,27 @@ class _AdminState extends State<Admin> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 2.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // TODO: Implement the action for the third card
-                          },
+                  child: GestureDetector(
+                    /*onTap: () {
+                      // TODO: Implement the action for the third card (Total Orders)
+                      // For example, you can navigate to the OrdersScreen or perform any other desired action.
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              OrdersScreen(), // Replace with your OrdersScreen widget
+                        ),
+                      );
+                    },*/
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 2.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -232,12 +240,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Orders',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount2',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -250,19 +258,27 @@ class _AdminState extends State<Admin> {
                 SizedBox(width: 8),
                 Expanded(
                   flex: 1,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      elevation: 2.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // TODO: Implement the action for the fourth card
-                          },
+                  child: GestureDetector(
+                    /*onTap: () {
+                      // TODO: Implement the action for the fourth card (Total Payments)
+                      // For example, you can navigate to the PaymentsScreen or perform any other desired action.
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PaymentsScreen(), // Replace with your PaymentsScreen widget
+                        ),
+                      );
+                    },*/
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 2.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -274,12 +290,12 @@ class _AdminState extends State<Admin> {
                                 SizedBox(height: 10),
                                 Text(
                                   'Total Payments',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '$rowCount3',
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
                             ),
@@ -466,7 +482,16 @@ class UsersScreen extends StatelessWidget {
                         ),
                         columns: [
                           DataColumn(
+                            label: Text('First Name'),
+                          ),
+                          DataColumn(
+                            label: Text('Last Name'),
+                          ),
+                          DataColumn(
                             label: Text('Email'),
+                          ),
+                          DataColumn(
+                            label: Text('Phone Number'),
                           ),
                           DataColumn(
                             label: Text('Role'),
@@ -477,13 +502,31 @@ class UsersScreen extends StatelessWidget {
                         ],
                         rows: users.map((userDoc) {
                           final user = userDoc.data() as Map<String, dynamic>;
+                          final fname = user['fname'];
+                          final lname = user['lname'];
                           final email = user['email'];
+                          final phoneno = user['phoneno'];
                           final role = user['role'];
 
                           return DataRow(
                             cells: [
                               DataCell(
+                                Text(fname),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                              DataCell(
+                                Text(lname),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                              DataCell(
                                 Text(email),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                              DataCell(
+                                Text(phoneno),
                                 showEditIcon: false,
                                 placeholder: false,
                               ),
@@ -560,45 +603,75 @@ void deleteUser(BuildContext context, String userId) async {
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
-    // If the user document does not exist, do not delete it.
+    // If the user document does not exist, show an error message and return.
     if (!userDoc.exists) {
-      print('User document with ID $userId does not exist.');
+      Fluttertoast.showToast(
+        msg: 'User document with ID $userId does not exist.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
       return;
     }
 
-    // Delete the user.
-    try {
+    // Delete the user from Firebase Authentication.
+    /*try {
       await FirebaseAuth.instance.currentUser!.delete();
-      print('The user has been deleted.');
+      print('The user has been deleted from Firebase Authentication.');
     } on FirebaseAuthException catch (e) {
-      // Handle the exception.
-      print(e.message);
+      // Handle the exception for Firebase Authentication.
+      Fluttertoast.showToast(
+        msg: 'Failed to delete user from Authentication. ${e.message}',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
+    }*/
+
+    // Delete user document from Firestore.
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+      print('Deleted user with ID: $userId from Firestore.');
+    } catch (e) {
+      // Handle the exception for Firestore.
+      Fluttertoast.showToast(
+        msg: 'Failed to delete user from Firestore. Please try again.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
     }
 
-    // Delete user from Firestore
-    await FirebaseFirestore.instance.collection('users').doc(userId).delete();
-    print('Deleted user with ID: $userId');
+    // Show a success message using FlutterToast.
+    Fluttertoast.showToast(
+      msg: 'The user has been deleted successfully.',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 2,
+      backgroundColor: Colors.blue,
+      textColor: Colors.white,
+    );
 
-    // Navigate back to the user screen
-    Navigator.pop(context);
+    // Optionally, you can navigate back to the user screen here if needed.
+    //Navigator.pop(context);
   } catch (e) {
     print('Error deleting user: $e');
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text('Failed to delete user. Please try again.'),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+    // Show an error message using FlutterToast.
+    Fluttertoast.showToast(
+      msg: 'Failed to delete user. Please try again.',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 2,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
     );
   }
 }
@@ -753,7 +826,10 @@ class UpdateUserScreen extends StatefulWidget {
 
 class _UpdateUserScreenState extends State<UpdateUserScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _lnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phonenoController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
 
   @override
@@ -771,11 +847,17 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
 
     if (snapshot.exists) {
       final user = snapshot.data() as Map<String, dynamic>;
+      final String fname = user['fname'];
+      final String lname = user['lname'];
       final String email = user['email'];
+      final String phoneno = user['phoneno'];
       final String role = user['role'];
 
       setState(() {
+        _fnameController.text = fname;
+        _lnameController.text = lname;
         _emailController.text = email;
+        _phonenoController.text = phoneno;
         _roleController.text = role;
       });
     }
@@ -783,23 +865,40 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
 
   void _updateUser() {
     if (_formKey.currentState!.validate()) {
+      final String fname = _fnameController.text;
+      final String lname = _lnameController.text;
       final String email = _emailController.text;
+      final String phoneno = _phonenoController.text;
       final String role = _roleController.text;
 
       // TODO: Implement user update logic using Firestore
-      updateUserInFirestore(email, role);
+      updateUserInFirestore(fname, lname, phoneno, email, role);
+
+      // Show a FlutterToast to indicate that the user has been updated
+      Fluttertoast.showToast(
+        msg: 'User updated!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2, // Adjust the duration as needed
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
 
       // Navigate back to the user screen
       Navigator.pop(context);
     }
   }
 
-  void updateUserInFirestore(String email, String role) {
+  void updateUserInFirestore(
+      String fname, String lname, String phoneno, String email, String role) {
     FirebaseFirestore.instance.collection('users').doc(widget.userId).update({
+      'fname': fname,
+      'lname': lname,
       'email': email,
+      'phoneno': phoneno,
       'role': role,
     });
-    print('User updated: email=$email, role=$role');
+    print('User updated: email=$email');
   }
 
   @override
@@ -820,11 +919,50 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
                   child: TextFormField(
+                    controller: _fnameController,
+                    decoration: InputDecoration(labelText: 'First Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the first name';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  child: TextFormField(
+                    controller: _lnameController,
+                    decoration: InputDecoration(labelText: 'Last Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the last name';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  child: TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(labelText: 'Email'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter an email';
+                        return 'Please enter the email';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  child: TextFormField(
+                    controller: _phonenoController,
+                    decoration: InputDecoration(labelText: 'Phone Number'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the phone number';
                       }
                       return null;
                     },

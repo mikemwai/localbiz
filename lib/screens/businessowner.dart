@@ -1,12 +1,13 @@
 // business_owner.dart
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, unnecessary_import
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:localbiz1/screens/businessowner/businessprofile.dart';
+import 'package:localbiz1/screens/businessowner/orders.dart';
 import '../utils/authentication.dart';
-import 'admin/profile_screen1.dart';
 import 'businessowner/profile_screen2.dart';
 import 'signin.dart';
 
@@ -62,10 +63,33 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                 return CircularProgressIndicator();
               }
 
-              if (!snapshot.hasData) {
-                // If the document with the provided email is not found
+              if (!snapshot.hasData || !snapshot.data!.exists) {
+                // If the document with the provided email is not found or does not exist
                 return Center(
-                  child: Text('No profile data found'),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'No business profile found.',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Navigate to the screen to add business profile
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Businessprofile(
+                                email: email, // Changed userEmail to email
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text('Add Business Profile'),
+                      ),
+                    ],
+                  ),
                 );
               }
 
@@ -116,6 +140,28 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 50, // Set the desired height here
+                    width: MediaQuery.of(context).size.width *
+                        0.70, // Set the desired width here7
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen2(
+                              email: '',
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text('Update Business Profile'),
+                    ),
+                  ),
                 ],
               );
             },
@@ -155,14 +201,12 @@ class _BusinessOwnerState extends State<BusinessOwner> {
             ),
             ListTile(
               leading: Icon(Icons.business),
-              title: Text('Update Business Profile'),
+              title: Text('Business Profile'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen2(
-                      email: email, // Changed userEmail to email
-                    ),
+                    builder: (context) => BusinessOwner(),
                   ),
                 );
               },
@@ -171,16 +215,28 @@ class _BusinessOwnerState extends State<BusinessOwner> {
             ListTile(
               leading: Icon(Icons.shopping_bag),
               title: const Text('Products'),
-              onTap: () {
-                // TODO: Implement the navigation to the products screen
-              },
+              /*onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Order(),
+                  ),
+                );
+              },*/
             ),
             const Divider(),
             ListTile(
               leading: Icon(Icons.shopping_cart),
               title: const Text('Orders'),
               onTap: () {
-                // TODO: Implement the navigation to the orders screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderView(
+                      orderId: '',
+                    ),
+                  ),
+                );
               },
             ),
             const Divider(),
