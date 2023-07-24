@@ -61,6 +61,8 @@ dependencies:
   lottie:
   shared_preferences: ^2.2.0
   flutter_datetime_picker: ^1.5.1
+  mpesa: ^2.0.2
+  pointycastle: ^3.7.3
 
 dev_dependencies:
   flutter_test:

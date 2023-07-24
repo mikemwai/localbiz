@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:localbiz1/screens/businessowner/businesspayments.dart';
 import 'package:localbiz1/screens/businessowner/businessprofile.dart';
 import 'package:localbiz1/screens/businessowner/orders.dart';
 import '../utils/authentication.dart';
@@ -211,7 +212,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                 );
               },
             ),
-            const Divider(),
+            /*const Divider(),
             ListTile(
               leading: Icon(Icons.shopping_bag),
               title: const Text('Products'),
@@ -223,7 +224,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                   ),
                 );
               },*/
-            ),
+            ),*/
             const Divider(),
             ListTile(
               leading: Icon(Icons.shopping_cart),
@@ -233,7 +234,8 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => OrderView(
-                      orderId: '',
+                      userEmail: '',
+                      userId: '',
                     ),
                   ),
                 );
@@ -244,7 +246,12 @@ class _BusinessOwnerState extends State<BusinessOwner> {
               leading: Icon(Icons.payment),
               title: const Text('Payments'),
               onTap: () {
-                // TODO: Implement the navigation to the saved businesses screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BusinessPayments(),
+                  ),
+                );
               },
             ),
             const Divider(),

@@ -271,8 +271,12 @@ class _BusinessSignupState extends State<BusinessSignup> {
         },
       );
     } else {
-      Authentication.businesssignup(context, email, password);
-      _showSuccessSnackBar(); // Show success snackbar
+      bool businessRegistrationSuccessful =
+          await Authentication.businesssignup(context, email, password);
+
+      if (businessRegistrationSuccessful) {
+        _showSuccessSnackBar(); // Show success snackbar only if business registration is successful
+      }
     }
   }
 

@@ -297,8 +297,12 @@ class _SignupState extends State<Signup> {
         },
       );
     } else {
-      Authentication.signup(context, email, password);
-      _showSuccessSnackBar(); // Show success snackbar
+      bool registrationSuccessful =
+          await Authentication.signup(context, email, password);
+
+      if (registrationSuccessful) {
+        _showSuccessSnackBar(); // Show success snackbar only if registration is successful
+      }
     }
   }
 

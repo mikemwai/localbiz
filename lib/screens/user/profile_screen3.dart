@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:localbiz1/screens/user/closedorders.dart';
 import '../../utils/authentication.dart';
 import '../homepage.dart';
 import '../signin.dart';
@@ -183,6 +184,7 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                 );
               },
             ),
+            const Divider(),
             ListTile(
               leading: Icon(Icons.person),
               title: Text('View Profile'),
@@ -196,20 +198,6 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
                 );
               },
             ),
-            /*ListTile(
-              leading: Icon(Icons.person), // Icon for updating profile
-              title: const Text('Update Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                      userId: '',
-                    ),
-                  ),
-                );
-              },
-            ),*/
             const Divider(),
             ListTile(
               leading: Icon(Icons.business), // Icon for saved businesses
@@ -225,10 +213,18 @@ class _ProfileScreen3State extends State<ProfileScreen3> {
             ),
             const Divider(),
             ListTile(
-              leading: Icon(Icons.payment), // Icon for payments
-              title: const Text('Payments'),
+              leading: Icon(Icons.shopping_cart), // Icon for payments
+              title: const Text('Closed Orders'),
               onTap: () {
-                // TODO: Implement the navigation to the payments screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ClosedOrders(
+                      userEmail: '',
+                      userId: '',
+                    ),
+                  ),
+                );
               },
             ),
             const Divider(),

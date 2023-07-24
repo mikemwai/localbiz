@@ -1,145 +1,79 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_null_comparison, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:localbiz1/screens/businessowner.dart';
+import 'package:localbiz1/screens/businessowner/businesspayments.dart';
+import 'package:localbiz1/screens/signin.dart';
+import 'package:localbiz1/utils/authentication.dart';
+import 'package:pointycastle/api.dart' as mac;
+import 'package:pointycastle/digests/sha256.dart';
+import 'package:pointycastle/key_derivators/api.dart' as mac;
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({Key? key, required this.userId}) : super(key: key);
-
   final String userId;
 
+  const OrdersScreen({super.key, required this.userId});
+
   @override
-  OrdersScreenState createState() => OrdersScreenState();
+  _OrdersScreenState createState() => _OrdersScreenState();
 }
 
-class OrdersScreenState extends State<OrdersScreen> {
-  //final String businessId;
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _phone_noController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    getUserDetails();
-  }
-
-  void getUserDetails() async {
-    // Retrieve user details from Firestore using the provided userId
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
-        .get();
-
-    if (snapshot.exists) {
-      final user = snapshot.data() as Map<String, dynamic>;
-      final String email = user['email'];
-
-      setState(() {
-        _emailController = email as TextEditingController;
-      });
-    }
-  }
-
-  /*Future<void> getUserEmail() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        String email = user.email ?? ''; // Changed userEmail to email
-      });
-    }
-  }*/
-
-  void createOrder() async {
-    if (_formKey.currentState!.validate()) {
-      // Create a document reference in the "orders" collection.
-      final documentReference =
-          FirebaseFirestore.instance.collection('orders').doc();
-
-      // Get the business details from the text controllers.
-      final String price = _priceController.text;
-      final String phoneNo = _phone_noController.text;
-      final String email = _emailController.text;
-
-      // Save the business details to Firestore.
-      await documentReference.set({
-        'price': price,
-        'phone_no': phoneNo,
-        'status': '',
-        'email': email,
-      });
-
-      // Show a toast to indicate that the business profile has been added.
-      Fluttertoast.showToast(
-        msg: 'Order placed successfully!',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.blue, // Set the background color of the toast
-        textColor: Colors.white, // Set the text color of the toast
-        fontSize: 16.0,
-      );
-
-      // Navigate back to the previous screen
-      Navigator.pop(context);
-    }
-  }
+class _OrdersScreenState extends State<OrdersScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Order Details'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Form(
-            key: _formKey,
+      appBar: AppBar(title: Text('Order Details')),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
-                  height: 50, // Set the desired height
-                  width: MediaQuery.of(context).size.width * 0.80,
-                  child: TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Business Owner Email',
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 50, // Set the desired height
-                  width: MediaQuery.of(context).size.width * 0.80,
-                  child: TextFormField(
-                    controller: _priceController,
-                    decoration: InputDecoration(labelText: 'Total Price'),
-                  ),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(hintText: "Business Email"),
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 16),
-                SizedBox(
-                  height: 50, // Set the desired height
-                  width: MediaQuery.of(context).size.width * 0.80,
-                  child: TextFormField(
-                    controller: _phone_noController,
-                    decoration: InputDecoration(labelText: 'Customer Phone No'),
-                  ),
+                TextField(
+                  controller: phoneNumberController,
+                  decoration: InputDecoration(hintText: "Customer Phone No"),
+                  keyboardType: TextInputType.phone,
                 ),
                 SizedBox(height: 16),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  height: 50, // Replace with your desired height
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    onPressed: createOrder,
-                    child: Text('Place Order'),
-                  ),
+                TextField(
+                  controller: priceController,
+                  decoration: InputDecoration(hintText: "Price"),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: statusController,
+                  decoration: InputDecoration(
+                      hintText: "Status (Not Paid, Paid, Delivered)"),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    placeOrder();
+                  },
+                  child: Text("Place Order"),
                 ),
               ],
             ),
@@ -148,18 +82,97 @@ class OrdersScreenState extends State<OrdersScreen> {
       ),
     );
   }
+
+  Future<void> showToast(String message) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void placeOrder() {
+    final String email = emailController.text;
+    final String phoneNumber = phoneNumberController.text;
+    final String price = priceController.text;
+    final String status = statusController.text;
+
+    // Check if all required fields are filled
+    if (email.isEmpty ||
+        phoneNumber.isEmpty ||
+        price.isEmpty ||
+        status.isEmpty) {
+      showToast("Please fill all fields.");
+      return;
+    }
+
+    // Save order details to Firestore
+    FirebaseFirestore.instance.collection("orders").add({
+      "email": email,
+      "phone_no": phoneNumber,
+      "price": price,
+      "status": status,
+    }).then((_) {
+      // Clear form fields after successful order placement
+      emailController.clear();
+      phoneNumberController.clear();
+      priceController.clear();
+      statusController.clear();
+
+      // Display "Order Placed Successfully" message
+      showToast("Order placed successfully!");
+      Navigator.of(context).pop();
+    }).catchError((error) {
+      showToast("Failed to place order. Please try again later.");
+    });
+  }
 }
 
 class OrderView extends StatefulWidget {
-  const OrderView({Key? key, required this.orderId}) : super(key: key);
+  const OrderView({Key? key, required this.userId, required this.userEmail})
+      : super(key: key);
 
-  final String orderId;
+  final String userId;
+  final String userEmail;
 
   @override
   OrderViewState createState() => OrderViewState();
 }
 
 class OrderViewState extends State<OrderView> {
+  bool isDrawerOpen = false;
+  String email = ''; // Changed userEmail to email
+
+  void toggleDrawer() {
+    setState(() {
+      isDrawerOpen = !isDrawerOpen;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserEmail();
+  }
+
+  Future<void> getUserEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        email = user.email ?? ''; // Changed userEmail to email
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,7 +180,9 @@ class OrderViewState extends State<OrderView> {
         title: Text('Orders'),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('orders').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('orders')
+            .snapshots(), // Retrieve all orders from the "orders" collection
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -177,7 +192,7 @@ class OrderViewState extends State<OrderView> {
             return CircularProgressIndicator();
           }
 
-          // Extract user documents from the snapshot
+          // Extract order documents from the snapshot
           final orders = snapshot.data!.docs;
 
           // Build the table widget
@@ -200,30 +215,37 @@ class OrderViewState extends State<OrderView> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
-                        columnSpacing:
-                            30.0, // Adjust the spacing between columns
+                        columnSpacing: 30.0,
                         headingRowColor: MaterialStateColor.resolveWith(
                           (states) => Colors.grey.shade300,
                         ),
                         columns: [
                           DataColumn(
-                            label: Text('Email'),
+                            label: Text('Business Email'),
                           ),
                           DataColumn(
                             label: Text('Price'),
                           ),
                           DataColumn(
-                            label: Text('Phone Number'),
+                            label: Text('Customer Phone No'),
+                          ),
+                          DataColumn(
+                            label: Text('Status'),
                           ),
                           DataColumn(
                             label: Text('Action'),
                           ),
                         ],
-                        rows: orders.map((userDoc) {
-                          final orders = userDoc.data() as Map<String, dynamic>;
-                          final email = orders['email'];
-                          final price = orders['price'];
-                          final phone_no = orders['phone_no'];
+                        rows: orders.map((orderDoc) {
+                          final order = orderDoc.data() as Map<String, dynamic>;
+                          final email = order['email'] ??
+                              'N/A'; // Handle null value with a default 'N/A'
+                          final price = order['price'] ??
+                              0; // Handle null value with a default value of 0
+                          final phoneNo = order['phone_no'] ??
+                              'N/A'; // Handle null value with a default 'N/A'
+                          final status = order['status'] ??
+                              'N/A'; // Handle null value with a default 'N/A'
 
                           return DataRow(
                             cells: [
@@ -233,17 +255,22 @@ class OrderViewState extends State<OrderView> {
                                 placeholder: false,
                               ),
                               DataCell(
-                                Text(price),
+                                Text(price.toString()),
                                 showEditIcon: false,
                                 placeholder: false,
                               ),
                               DataCell(
-                                Text(phone_no),
+                                Text(phoneNo),
                                 showEditIcon: false,
                                 placeholder: false,
                               ),
                               DataCell(
-                                buildActionWidget(context, userDoc.id),
+                                Text(status),
+                                showEditIcon: false,
+                                placeholder: false,
+                              ),
+                              DataCell(
+                                buildActionWidget(context, orderDoc.id),
                                 showEditIcon: false,
                                 placeholder: false,
                               ),
@@ -266,11 +293,117 @@ class OrderViewState extends State<OrderView> {
             context,
             MaterialPageRoute(
               builder: (context) => OrdersScreen(
-                userId: '',
+                userId: widget.userId,
               ), // Replace with your BusinessesScreen widget
             ),
           );
         },
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.account_circle,
+                  size: 64,
+                  color: Colors.blue,
+                ),
+              ),
+              accountName: Text(
+                'Profile',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+              accountEmail: Text(
+                email, // Changed userEmail to email
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.business),
+              title: Text('Business Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BusinessOwner(),
+                  ),
+                );
+              },
+            ),
+            /*const Divider(),
+            ListTile(
+              leading: Icon(Icons.shopping_bag),
+              title: const Text('Products'),
+              /*onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Order(),
+                  ),
+                );
+              },*/
+            ),*/
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: const Text('Orders'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderView(
+                      userEmail: '',
+                      userId: '',
+                    ),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.payment),
+              title: const Text('Payments'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BusinessPayments(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: const Text(
+                'Sign out',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              onTap: () {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  Authentication.signout(context: context);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const Signin(),
+                  ));
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -311,6 +444,7 @@ class UpdateOrderState extends State<UpdateOrder> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _phone_noController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void initState() {
@@ -327,11 +461,13 @@ class UpdateOrderState extends State<UpdateOrder> {
 
       if (snapshot.exists) {
         final order = snapshot.data() as Map<String, dynamic>;
+        final String email = order['email'];
         final String price = order['price'];
         final String phoneNo = order['phone_no'];
         final String status = order['status'];
 
         setState(() {
+          _emailController.text = email;
           _priceController.text = price;
           _phone_noController.text = phoneNo;
           _statusController.text = status;
@@ -344,12 +480,13 @@ class UpdateOrderState extends State<UpdateOrder> {
 
   void _updateOrder() async {
     if (_formKey.currentState!.validate()) {
+      final String email = _emailController.text;
       final String price = _priceController.text;
       final String phoneNo = _phone_noController.text;
       final String status = _statusController.text;
 
       // TODO: Implement order update logic using Firestore
-      await updateOrderInFirestore(price, phoneNo, status);
+      await updateOrderInFirestore(email, price, phoneNo, status);
 
       Fluttertoast.showToast(
         msg: 'Order updated!',
@@ -365,12 +502,13 @@ class UpdateOrderState extends State<UpdateOrder> {
   }
 
   Future<void> updateOrderInFirestore(
-      String price, String phoneNo, String status) async {
+      String email, String price, String phoneNo, String status) async {
     try {
       await FirebaseFirestore.instance
           .collection('orders')
           .doc(widget.orderId) // Use the orderId to update the correct document
           .update({
+        'email': email,
         'price': price,
         'phone_no': phoneNo,
         'status': status,
@@ -396,6 +534,19 @@ class UpdateOrderState extends State<UpdateOrder> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  child: TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(labelText: 'Business Email'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your business email';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
                   child: TextFormField(

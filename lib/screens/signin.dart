@@ -22,6 +22,8 @@ class _SigninState extends State<Signin> {
   bool _showError = false;
   bool _isInvalidCredentials = false;
   bool _isSigningIn = false;
+  bool _isLoadingGoogle =
+      false; // New state variable for loading indicator of "Sign in with Google" button
   bool _isPasswordVisible = false;
   Timer? _timer;
   bool _isFingerprintSupported = false;
@@ -183,8 +185,10 @@ class _SigninState extends State<Signin> {
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15))),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
                     onPressed: _isSigningIn
                         ? null
                         : () {
@@ -221,13 +225,18 @@ class _SigninState extends State<Signin> {
                               },
                             );
                           },
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
+                    child:
+                        _isSigningIn // Show loading indicator or sign-in text based on _isSigningIn
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white))
+                            : const Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
                   ),
                 ),
                 const SizedBox(height: 30),
