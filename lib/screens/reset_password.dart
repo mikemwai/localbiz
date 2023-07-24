@@ -10,7 +10,28 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
-  late String _email;
+  String _email = ''; // Initialize the _email variable with an empty string
+
+  void _requestPasswordReset() {
+    if (_email.trim().isEmpty) {
+      _showToast("Password Reset Failed! Try Again.");
+    } else {
+      // Perform the password reset action
+      Authentication.resetPassword(context, _email);
+      _showToast("A reset email has been sent to you");
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 2,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +59,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 decoration: const InputDecoration(hintText: 'Email'),
                 onChanged: (value) {
                   setState(() {
-                    _email = value.trim();
+                    _email = value;
                   });
                 },
               ),
@@ -48,27 +69,19 @@ class _ResetPasswordState extends State<ResetPassword> {
             width: MediaQuery.of(context).size.width * 0.80,
             height: 50,
             child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15))),
-                onPressed: () {
-                  Authentication.resetPassword(context, _email);
-                  Fluttertoast.showToast(
-                    msg: "A reset email has been sent to you", // message
-                    toastLength: Toast.LENGTH_SHORT, // length
-                    gravity: ToastGravity.CENTER, // location
-
-                    timeInSecForIosWeb: 2,
-                  );
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Request Reset',
-                  style: TextStyle(
-                    //fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                )),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: _requestPasswordReset,
+              child: const Text(
+                'Request Reset',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
           ),
           const SizedBox(
             height: 20,
@@ -78,15 +91,16 @@ class _ResetPasswordState extends State<ResetPassword> {
             height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15))),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
               child: const Text(
                 'Go Back!',
                 style: TextStyle(
-                  //fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),

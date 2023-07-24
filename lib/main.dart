@@ -9,7 +9,7 @@ import 'package:localbiz1/utils/authentication.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //Mobile App Code
-void main() {
+/*void main() {
   WidgetsFlutterBinding.ensureInitialized();
   //Authentication.initializeFirebase();
   SystemChrome.setPreferredOrientations([
@@ -51,10 +51,10 @@ class MyApp extends StatelessWidget {
       },
     );
   }
-}
+}*/
 
 //Web App Code
-/*void main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -111,4 +111,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}*/
+}
