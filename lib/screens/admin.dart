@@ -5,6 +5,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:localbiz1/screens/admin/adminprofile_screen.dart';
+import 'package:localbiz1/screens/admin/orders.dart';
+import 'package:localbiz1/screens/admin/payments.dart';
 import '../utils/authentication.dart';
 import 'admin/businesses.dart';
 import 'signin.dart';
@@ -209,17 +212,17 @@ class _AdminState extends State<Admin> {
                 Expanded(
                   flex: 1,
                   child: GestureDetector(
-                    /*onTap: () {
-                      // TODO: Implement the action for the third card (Total Orders)
-                      // For example, you can navigate to the OrdersScreen or perform any other desired action.
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              OrdersScreen(), // Replace with your OrdersScreen widget
+                          builder: (context) => OrdersAdmin(
+                            userEmail: '',
+                            userId: '',
+                          ), // Replace with your BusinessesScreen widget
                         ),
                       );
-                    },*/
+                    },
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height / 4,
                       child: Card(
@@ -259,17 +262,17 @@ class _AdminState extends State<Admin> {
                 Expanded(
                   flex: 1,
                   child: GestureDetector(
-                    /*onTap: () {
-                      // TODO: Implement the action for the fourth card (Total Payments)
-                      // For example, you can navigate to the PaymentsScreen or perform any other desired action.
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              PaymentsScreen(), // Replace with your PaymentsScreen widget
+                          builder: (context) => PaymentsAdmin(
+                            userEmail: '',
+                            userId: '',
+                          ), // Replace with your BusinessesScreen widget
                         ),
                       );
-                    },*/
+                    },
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height / 4,
                       child: Card(
@@ -343,15 +346,28 @@ class _AdminState extends State<Admin> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Update Profile'),
+              leading: Icon(Icons.home),
+              title: Text('Home'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen1(
-                      userId: '',
-                    ), // Replace with your ProfileScreen widget
+                    builder: (context) =>
+                        Admin(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AdminProfileScreen(), // Replace with your ProfileScreen widget
                   ),
                 );
               },
@@ -388,7 +404,15 @@ class _AdminState extends State<Admin> {
               leading: Icon(Icons.shopping_cart), // Add the Shopping Cart Icon
               title: const Text('Orders'),
               onTap: () {
-                // TODO: Implement the action for Orders
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdersAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
               },
             ),
             const Divider(),
@@ -396,17 +420,25 @@ class _AdminState extends State<Admin> {
               leading: Icon(Icons.payment), // Add the Payment Icon
               title: const Text('Payments'),
               onTap: () {
-                // TODO: Implement the action for Payments
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentsAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
               },
             ),
-            const Divider(),
+            /*const Divider(),
             ListTile(
               leading: Icon(Icons.star), // Add the Star Icon
               title: const Text('Ratings'),
               onTap: () {
                 // TODO: Implement the action for Ratings
               },
-            ),
+            ),*/
             const Divider(),
             ListTile(
               leading: Icon(Icons.logout),
@@ -432,8 +464,38 @@ class _AdminState extends State<Admin> {
   }
 }
 
-class UsersScreen extends StatelessWidget {
-  const UsersScreen({super.key});
+class UsersScreen extends StatefulWidget {
+  const UsersScreen({Key? key}) : super(key: key);
+
+  @override
+  State<UsersScreen> createState() => UsersScreenState();
+}
+
+class UsersScreenState extends State<UsersScreen> {
+  bool isDrawerOpen = false;
+  String userEmail = ''; // Declare userEmail variable
+
+  void toggleDrawer() {
+    setState(() {
+      isDrawerOpen = !isDrawerOpen;
+    });
+  }
+
+  Future<void> getUserEmail() async {
+    // Retrieve the user's email from Firebase
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userEmail = user.email ?? ''; // Update the userEmail variable
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserEmail(); // Call getUserEmail() method to retrieve the user's email
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -558,6 +620,153 @@ class UsersScreen extends StatelessWidget {
           // TODO: Implement create user functionality
           navigateToCreateUserScreen(context);
         },
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors
+                    .white, // Adjust the background color of the circle avatar
+                child: Icon(
+                  Icons.account_circle, // Replace with the desired icon
+                  size: 64, // Adjust the size of the icon as needed
+                  color: Colors.blue, // Adjust the color of the icon
+                ),
+              ),
+              accountName: Text(
+                'Profile',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+              accountEmail: Text(
+                userEmail, // Display the user's email retrieved from Firebase
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Admin(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AdminProfileScreen(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.group),
+              title: Text('Users'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.business),
+              title: Text('Businesses'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        BusinessesScreen(), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.shopping_cart), // Add the Shopping Cart Icon
+              title: const Text('Orders'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdersAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.payment), // Add the Payment Icon
+              title: const Text('Payments'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentsAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            /*const Divider(),
+            ListTile(
+              leading: Icon(Icons.star), // Add the Star Icon
+              title: const Text('Ratings'),
+              onTap: () {
+                // TODO: Implement the action for Ratings
+              },
+            ),*/
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: const Text(
+                'Sign out',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              onTap: () {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  Authentication.signout(context: context);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const Signin(),
+                  ));
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

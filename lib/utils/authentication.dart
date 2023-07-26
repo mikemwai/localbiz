@@ -97,11 +97,10 @@ class Authentication {
     await FirebaseAuth.instance.signOut();
   }
 
-  static Future<void> signup(
+  static Future<bool> signup(
     BuildContext context,
     String email,
     String password,
-    //String userId,
   ) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
@@ -133,14 +132,16 @@ class Authentication {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const VerifyScreen()),
       );
+
+      return true; // Return true to indicate successful registration
     } catch (error) {
       // Handle signup errors
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Signup Error'),
-            content: Text('Failed to sign up: $error'),
+            title: const Text('Registration Failed'),
+            content: Text('Try Again!'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -153,35 +154,34 @@ class Authentication {
         },
       );
       print('Error signing up: $error');
+      return false; // Return false to indicate registration failure
     }
   }
 
-  static Future<void> businesssignup(
-    BuildContext context,
-    String email,
-    String password,
-    //String userId,
-  ) async {
+  static Future<bool> businesssignup(
+      BuildContext context, String email, String password) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-      // Create a new user with email and password.
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      // Create a new business user with email and password.
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       // Get the user id.
       final uid = userCredential.user!.uid;
 
       // Create a document reference in Firestore.
       final documentReference =
-          FirebaseFirestore.instance.collection('users').doc(uid);
+          FirebaseFirestore.instance.collection('businesses').doc(uid);
 
       // Set the document data.
       Map<String, dynamic> data = {
-        'fname': '',
-        'lname': '',
-        'phoneno': '',
+        'business_name': '',
+        'business_address': '',
         'email': email,
         'role': 'business_owner',
       };
@@ -192,14 +192,16 @@ class Authentication {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const VerifyScreen()),
       );
+
+      return true; // Return true to indicate successful business registration
     } catch (error) {
-      // Handle signup errors
+      // Handle business registration errors
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Signup Error'),
-            content: Text('Failed to sign up: $error'),
+            title: const Text('Business Registration Failed'),
+            content: Text('Try Again!'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -211,7 +213,8 @@ class Authentication {
           );
         },
       );
-      print('Error signing up: $error');
+      print('Error registering business: $error');
+      return false; // Return false to indicate business registration failure
     }
   }
 

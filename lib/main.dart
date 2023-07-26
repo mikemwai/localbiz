@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //Mobile App Code
 /*void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Authentication.initializeFirebase();
+  //Authentication.initializeFirebase();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -25,26 +25,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Authentication.initializeFirebase(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
-            return MaterialApp(
-              title: 'LocalBiz',
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              //routes: AppRoutes.signin,
-              //routes: AppRoutes.splashScreen,
-              home: SplashScreen(), // Update to SplashScreen
-            );
-          }
-          return const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue));
-        });
+      future: Authentication.initializeFirebase(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MaterialApp(
+            title: 'LocalBiz',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: SplashScreen(), // Update to SplashScreen
+          );
+        }
+        return Container(
+          color: Colors.white,
+          child: Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          ),
+        );
+      },
+    );
   }
 }*/
 

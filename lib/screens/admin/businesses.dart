@@ -1,10 +1,49 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_null_comparison, non_constant_identifier_names, use_build_context_synchronously
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:localbiz1/screens/admin.dart';
+import 'package:localbiz1/screens/admin/adminprofile_screen.dart';
+import 'package:localbiz1/screens/admin/orders.dart';
+import 'package:localbiz1/screens/admin/payments.dart';
+import 'package:localbiz1/screens/admin/profile_screen1.dart';
+import 'package:localbiz1/screens/signin.dart';
+import 'package:localbiz1/utils/authentication.dart';
 
-class BusinessesScreen extends StatelessWidget {
+class BusinessesScreen extends StatefulWidget {
   const BusinessesScreen({Key? key}) : super(key: key);
+
+  @override
+  State<BusinessesScreen> createState() => BusinessesScreenState();
+}
+
+class BusinessesScreenState extends State<BusinessesScreen> {
+  bool isDrawerOpen = false;
+  String userEmail = ''; // Declare userEmail variable
+
+  void toggleDrawer() {
+    setState(() {
+      isDrawerOpen = !isDrawerOpen;
+    });
+  }
+
+  Future<void> getUserEmail() async {
+    // Retrieve the user's email from Firebase
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userEmail = user.email ?? ''; // Update the userEmail variable
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserEmail(); // Call getUserEmail() method to retrieve the user's email
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,13 +168,153 @@ class BusinessesScreen extends StatelessWidget {
           );
         },
       ),
-      /*floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          // TODO: Implement create business functionality
-          navigateToCreateBusinessScreen(context);
-        },
-      ),*/
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors
+                    .white, // Adjust the background color of the circle avatar
+                child: Icon(
+                  Icons.account_circle, // Replace with the desired icon
+                  size: 64, // Adjust the size of the icon as needed
+                  color: Colors.blue, // Adjust the color of the icon
+                ),
+              ),
+              accountName: Text(
+                'Profile',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+              accountEmail: Text(
+                userEmail, // Display the user's email retrieved from Firebase
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Admin(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AdminProfileScreen(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.group),
+              title: Text('Users'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.business),
+              title: Text('Businesses'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        BusinessesScreen(), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.shopping_cart), // Add the Shopping Cart Icon
+              title: const Text('Orders'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdersAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.payment), // Add the Payment Icon
+              title: const Text('Payments'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentsAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            /*const Divider(),
+            ListTile(
+              leading: Icon(Icons.star), // Add the Star Icon
+              title: const Text('Ratings'),
+              onTap: () {
+                // TODO: Implement the action for Ratings
+              },
+            ),*/
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: const Text(
+                'Sign out',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              onTap: () {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  Authentication.signout(context: context);
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const Signin(),
+                  ));
+                });
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 

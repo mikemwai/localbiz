@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, sized_box_for_whitespace, sort_child_properties_last, prefer_final_fields, unused_field, unnecessary_null_comparison, unused_element
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, sized_box_for_whitespace, sort_child_properties_last, prefer_final_fields, unused_field, unnecessary_null_comparison, unused_element, prefer_const_literals_to_create_immutables
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +22,8 @@ class _SigninState extends State<Signin> {
   bool _showError = false;
   bool _isInvalidCredentials = false;
   bool _isSigningIn = false;
+  bool _isLoadingGoogle =
+      false; // New state variable for loading indicator of "Sign in with Google" button
   bool _isPasswordVisible = false;
   Timer? _timer;
   bool _isFingerprintSupported = false;
@@ -183,8 +185,10 @@ class _SigninState extends State<Signin> {
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15))),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
                     onPressed: _isSigningIn
                         ? null
                         : () {
@@ -221,17 +225,23 @@ class _SigninState extends State<Signin> {
                               },
                             );
                           },
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
+                    child:
+                        _isSigningIn // Show loading indicator or sign-in text based on _isSigningIn
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white))
+                            : const Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
                   ),
                 ),
                 const SizedBox(height: 30),
-                SizedBox(
+                //Mobile
+                /*SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
                   height: 50,
                   child: ElevatedButton(
@@ -254,6 +264,43 @@ class _SigninState extends State<Signin> {
                             'assets/google.png',
                             fit: BoxFit.cover,
                           ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Sign in with Google',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 9, 9, 9),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),*/
+                //Web
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      backgroundColor: Color.fromARGB(255, 253, 253, 253),
+                    ),
+                    onPressed: () {
+                      Authentication.signinWithGoogle(context: context);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons
+                              .g_mobiledata_rounded, // Replace with any other Google-related icons
+                          size: 52,
+                          color: Colors
+                              .blue, // Replace with the desired color for the icon
                         ),
                         const SizedBox(width: 10),
                         const Text(

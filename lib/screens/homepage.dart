@@ -18,6 +18,7 @@ import 'package:localbiz1/models/auto_complete_result.dart';
 import 'package:localbiz1/providers/search_places.dart';
 import 'package:localbiz1/screens/signin.dart';
 import 'package:localbiz1/screens/user/businesses.dart';
+import 'package:localbiz1/screens/user/closedorders.dart';
 import 'package:localbiz1/screens/user/profile_screen3.dart';
 import 'package:localbiz1/services/map_services.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
@@ -436,10 +437,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             Stack(
               children: [
-                /*AppBar(
-                  title: const Text('User: Local Business Search'),
-                ),*/
-                // Local Businesses
                 SizedBox(
                   height: screenHeight,
                   width: screenWidth,
@@ -514,7 +511,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                 ),
-
                 searchToggle
                     ? Padding(
                         padding:
@@ -1169,20 +1165,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                 );
               },
             ),
-            /*ListTile(
-              leading: Icon(Icons.person), // Icon for updating profile
-              title: const Text('Update Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                      userId: '',
-                    ),
-                  ),
-                );
-              },
-            ),*/
             const Divider(),
             ListTile(
               leading: Icon(Icons.business), // Icon for saved businesses
@@ -1198,10 +1180,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             const Divider(),
             ListTile(
-              leading: Icon(Icons.payment), // Icon for payments
-              title: const Text('Payments'),
+              leading: Icon(Icons.shopping_cart), // Icon for payments
+              title: const Text('Closed Orders'),
               onTap: () {
-                // TODO: Implement the navigation to the payments screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ClosedOrders(
+                      userEmail: '',
+                      userId: '',
+                    ),
+                  ),
+                );
               },
             ),
             const Divider(),

@@ -1,33 +1,30 @@
 // business_owner.dart
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, unnecessary_import
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:localbiz1/screens/businessowner/businesspayments.dart';
-import 'package:localbiz1/screens/businessowner/businessprofile.dart';
-import 'package:localbiz1/screens/businessowner/orders.dart';
-import '../utils/authentication.dart';
-import 'businessowner/profile_screen2.dart';
-import 'signin.dart';
+import 'package:localbiz1/screens/admin.dart';
+import 'package:localbiz1/screens/admin/orders.dart';
+import 'package:localbiz1/screens/admin/payments.dart';
+import 'package:localbiz1/screens/admin/profile_screen1.dart';
+import 'package:localbiz1/screens/user/closedorders.dart';
+import '../../utils/authentication.dart';
+import '../homepage.dart';
+import '../signin.dart';
+import 'businesses.dart';
 
-class BusinessOwner extends StatefulWidget {
-  const BusinessOwner({Key? key}) : super(key: key);
+class AdminProfileScreen extends StatefulWidget {
+  const AdminProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<BusinessOwner> createState() => _BusinessOwnerState();
+  _ProfileScreen3State createState() => _ProfileScreen3State();
 }
 
-class _BusinessOwnerState extends State<BusinessOwner> {
-  bool isDrawerOpen = false;
-  String email = ''; // Changed userEmail to email
-
-  void toggleDrawer() {
-    setState(() {
-      isDrawerOpen = !isDrawerOpen;
-    });
-  }
+class _ProfileScreen3State extends State<AdminProfileScreen> {
+  String userEmail = ''; // Changed userEmail to email
+  String userId = ''; // Add userId variable here
 
   @override
   void initState() {
@@ -39,7 +36,8 @@ class _BusinessOwnerState extends State<BusinessOwner> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       setState(() {
-        email = user.email ?? ''; // Changed userEmail to email
+        userEmail = user.email ?? ''; // Changed userEmail to email
+        userId = user.uid; // Set the userId value here
       });
     }
   }
@@ -48,7 +46,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Business Owner Page'),
+        title: const Text('Profile'),
       ),
       body: Center(
         // Wrap the ListView with Center widget
@@ -56,50 +54,26 @@ class _BusinessOwnerState extends State<BusinessOwner> {
           padding: const EdgeInsets.all(10.0),
           child: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('businesses')
-                .doc(email) // Assuming email is the document ID
+                .collection('users')
+                .doc(userId) // Assuming email is the document ID
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
               }
 
-              if (!snapshot.hasData || !snapshot.data!.exists) {
-                // If the document with the provided email is not found or does not exist
+              if (!snapshot.hasData || snapshot.data!.data() == null) {
+                // If the document with the provided email is not found or the data is null
                 return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'No business profile found.',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navigate to the screen to add business profile
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Businessprofile(
-                                email: email, // Changed userEmail to email
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text('Add Business Profile'),
-                      ),
-                    ],
-                  ),
+                  child: Text('No profile data found'),
                 );
               }
 
-              final business = snapshot.data!.data() as Map<String, dynamic>;
-              final String? name = business['name'] as String?;
-              final String? category = business['category'] as String?;
-              final String? phoneNo = business['phone_no'] as String?;
-              final String? operatingHours =
-                  business['operating_hours'] as String?;
+              final user = snapshot.data!.data()! as Map<String, dynamic>;
+              final String? fname = user['fname'] as String?;
+              final String? lname = user['lname'] as String?;
+              final String? phoneno = user['phoneno'] as String?;
+              final String? email = user['email'] as String?;
 
               return ListView(
                 children: [
@@ -120,22 +94,22 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                           Divider(),
                           ListTile(
                             leading: Icon(Icons.person),
-                            title: Text('Name: $name'),
+                            title: Text('First Name: $fname'),
                           ),
                           Divider(),
                           ListTile(
-                            leading: Icon(Icons.category),
-                            title: Text('Category: $category'),
+                            leading: Icon(Icons.person),
+                            title: Text('Last Name: $lname'),
                           ),
                           Divider(),
                           ListTile(
                             leading: Icon(Icons.phone),
-                            title: Text('Phone Number: $phoneNo'),
+                            title: Text('Phone Number: $phoneno'),
                           ),
                           Divider(),
                           ListTile(
-                            leading: Icon(Icons.access_time),
-                            title: Text('Operating Hours: $operatingHours'),
+                            leading: Icon(Icons.email),
+                            title: Text('Email: $email'),
                           ),
                         ],
                       ),
@@ -145,7 +119,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                   SizedBox(
                     height: 50, // Set the desired height here
                     width: MediaQuery.of(context).size.width *
-                        0.70, // Set the desired width here7
+                        0.80, // Set the desired width here7
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -154,13 +128,13 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileScreen2(
-                              email: '',
+                            builder: (context) => ProfileScreen1(
+                              userId: userId,
                             ),
                           ),
                         );
                       },
-                      child: Text('Update Business Profile'),
+                      child: Text('Update Profile'),
                     ),
                   ),
                 ],
@@ -178,11 +152,12 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                 color: Colors.blue,
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors
+                    .white, // Adjust the background color of the circle avatar
                 child: Icon(
-                  Icons.account_circle,
-                  size: 64,
-                  color: Colors.blue,
+                  Icons.account_circle, // Replace with the desired icon
+                  size: 64, // Adjust the size of the icon as needed
+                  color: Colors.blue, // Adjust the color of the icon
                 ),
               ),
               accountName: Text(
@@ -193,7 +168,7 @@ class _BusinessOwnerState extends State<BusinessOwner> {
                 ),
               ),
               accountEmail: Text(
-                email, // Changed userEmail to email
+                userEmail, // Display the user's email retrieved from Firebase
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -201,59 +176,99 @@ class _BusinessOwnerState extends State<BusinessOwner> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.business),
-              title: Text('Business Profile'),
+              leading: Icon(Icons.home),
+              title: Text('Home'),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BusinessOwner(),
+                    builder: (context) =>
+                        Admin(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AdminProfileScreen(), // Replace with your ProfileScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.group),
+              title: Text('Users'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.business),
+              title: Text('Businesses'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        BusinessesScreen(), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.shopping_cart), // Add the Shopping Cart Icon
+              title: const Text('Orders'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdersAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.payment), // Add the Payment Icon
+              title: const Text('Payments'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentsAdmin(
+                      userEmail: '',
+                      userId: '',
+                    ), // Replace with your BusinessesScreen widget
                   ),
                 );
               },
             ),
             /*const Divider(),
             ListTile(
-              leading: Icon(Icons.shopping_bag),
-              title: const Text('Products'),
-              /*onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Order(),
-                  ),
-                );
-              },*/
+              leading: Icon(Icons.star), // Add the Star Icon
+              title: const Text('Ratings'),
+              onTap: () {
+                // TODO: Implement the action for Ratings
+              },
             ),*/
-            const Divider(),
-            ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: const Text('Orders'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderView(
-                      userEmail: '',
-                      userId: '',
-                    ),
-                  ),
-                );
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: Icon(Icons.payment),
-              title: const Text('Payments'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BusinessPayments(),
-                  ),
-                );
-              },
-            ),
             const Divider(),
             ListTile(
               leading: Icon(Icons.logout),
