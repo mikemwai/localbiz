@@ -21,7 +21,7 @@ import 'package:localbiz1/screens/user/businesses.dart';
 import 'package:localbiz1/screens/user/closedorders.dart';
 import 'package:localbiz1/screens/user/profile_screen3.dart';
 import 'package:localbiz1/services/map_services.dart';
-//import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_webservice/places.dart' as Places;
 
