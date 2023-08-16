@@ -21,7 +21,7 @@ import 'package:localbiz1/screens/user/businesses.dart';
 import 'package:localbiz1/screens/user/closedorders.dart';
 import 'package:localbiz1/screens/user/profile_screen3.dart';
 import 'package:localbiz1/services/map_services.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:fab_circular_menu_plus/fab_circular_menu_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_webservice/places.dart' as Places;
 
@@ -1034,7 +1034,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: FabCircularMenu(
+      floatingActionButton: FabCircularMenuPlus(
           alignment: Alignment.bottomLeft,
           fabColor: Colors.blue.shade50,
           fabOpenColor: Colors.red.shade100,
