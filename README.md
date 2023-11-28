@@ -32,6 +32,13 @@ The project utilizes Firebase as the database. To set up the database, follow th
   - Enable Firebase Authentication and configure the desired sign-in methods.
   - Set up the Firestore database and Firestore rules according to your requirements.
 
+## Contributions
+
+To make contributions to the project:
+   - Fork the repository.
+   - Create a feature branch on your forked repository.
+   - Submit a [pull request](https://github.com/mikemwai/localbiz/pulls).
+
 ## Issues
 If you have any issues with the project, please feel free to open up an [issue](https://github.com/mikemwai/localbiz1/issues).
 
