@@ -34,10 +34,12 @@ The project utilizes Firebase as the database. To set up the database, follow th
 
 ## Contributions
 
-To make contributions to the project:
+- To make contributions to the project:
    - Fork the repository.
    - Create a feature branch on your forked repository.
    - Submit a [pull request](https://github.com/mikemwai/localbiz/pulls).
+
+- Additionally, feel free to send an [email](mailto:hellomikemwai@gmail.com) where you will receive feedback within 24 hours.
 
 ## Issues
 If you have any issues with the project, please feel free to open up an [issue](https://github.com/mikemwai/localbiz1/issues).
